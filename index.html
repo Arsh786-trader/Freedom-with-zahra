@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom With Zara - MEXC Crypto Terminal</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b132b; color: #f8fafc; padding: 10px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #1c2541; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #3a506b; font-size: 11px; }
+        .brand-badge { background: #00b4d8; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .status-dot { color: #2ec4b6; font-weight: bold; }
+        .pro-badge { background: #ffb703; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .sub-header { text-align: center; margin-bottom: 15px; }
+        .sub-header h1 { color: #00b4d8; font-size: 20px; margin-bottom: 3px; }
+        .sub-header p { color: #8d99ae; font-size: 11px; }
+        .timer-text { color: #2ec4b6; font-weight: bold; font-size: 11px; margin-top: 2px; }
+        .nav-container { display: flex; overflow-x: auto; gap: 6px; margin-bottom: 15px; padding-bottom: 5px; }
+        .nav-btn { background-color: #1c2541; color: #cbd5e1; border: 1px solid #3a506b; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; transition: all 0.2s; }
+        .nav-btn:hover, .nav-btn.active { background-color: #00b4d8; color: #fff; border-color: #00b4d8; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        .card { background-color: #1c2541; border-radius: 6px; padding: 10px; border: 1px solid #3a506b; box-shadow: 0 2px 4px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.1s; }
+        .card:hover { transform: translateY(-2px); border-color: #00b4d8; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .card-header h3 { color: #fff; font-size: 13px; font-weight: bold; }
+        .tag { background-color: #0b132b; color: #2ec4b6; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid #1d3557; }
+        .card-body p { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #283845; padding-top: 6px; }
+        .price { font-size: 11px; font-weight: bold; color: #ffd166; }
+        .btn { background-color: #2ec4b6; color: #0b132b; padding: 3px 10px; border-radius: 3px; text-decoration: none; font-weight: bold; font-size: 10px; transition: background 0.2s; }
+        .btn:hover { background-color: #20b2aa; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <span class="brand-badge">फ्रीडम विद ज़ारा</span>
+            <span class="status-dot">● Connected (MEXC Spot)</span>
+            <span class="pro-badge">Ultra Pro</span>
+        </div>
+        <div class="sub-header">
+            <h1>RSI Heatmap &amp; Live Spot Pairs</h1>
+            <p>Auto Scanning MEXC Spot Pairs Every 10s</p>
+            <div class="timer-text" id="timer">Next update in: 10s</div>
+        </div>
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="filterSelection('all', event)">Dashboard (All)</button>
+            <button class="nav-btn" onclick="filterSelection('hidden-bullish', event)">Hidden Bullish</button>
+            <button class="nav-btn" onclick="filterSelection('v1-method', event)">V1 Scalping</button>
+            <button class="nav-btn" onclick="filterSelection('ema', event)">EMA Crossover</button>
+            <button class="nav-btn" onclick="filterSelection('rsi-55-60', event)">RSI 55-60</button>
+            <button class="nav-btn" onclick="filterSelection('order-block', event)">Order Block (1H)</button>
+        </div>
+        <div class="grid" id="coins-grid"></div>
+    </div>
+    <script>
+        const coinList = [
+            {symbol:"MXUSDT",cat:"hidden-bullish",desc:"RSI: 28.5 | Oversold setup."},
+            {symbol:"KASUSDT",cat:"hidden-bullish",desc:"RSI: 34.2 | Pullback support."},
+            {symbol:"ETHUSDT",cat:"hidden-bullish",desc:"RSI: 38.1 | Accumulation zone."},
+            {symbol:"BTCUSDT",cat:"hidden-bullish",desc:"RSI: 32.4 | Support bounce."},
+            {symbol:"SOLUSDT",cat:"hidden-bullish",desc:"RSI: 29.8 | Oversold reversal."},
+            {symbol:"XRPUSDT",cat:"hidden-bullish",desc:"RSI: 36.5 | Range low retest."},
+            {symbol:"ADAUSDT",cat:"hidden-bullish",desc:"RSI: 31.2 | Accumulation phase."},
+            {symbol:"AVAXUSDT",cat:"hidden-bullish",desc:"RSI: 33.7 | Dip buying active."},
+            {symbol:"DOTUSDT",cat:"hidden-bullish",desc:"RSI: 35.0 | Support holding."},
+            {symbol:"LINKUSDT",cat:"hidden-bullish",desc:"RSI: 27.9 | Deep correction."},
+            {symbol:"NEARUSDT",cat:"hidden-bullish",desc:"RSI: 30.5 | Volume divergence."},
+            {symbol:"MATICUSDT",cat:"hidden-bullish",desc:"RSI: 34.8 | Trendline retest."},
+            {symbol:"UNIUSDT",cat:"hidden-bullish",desc:"RSI: 39.2 | Lower band bounce."},
+            {symbol:"ATOMUSDT",cat:"hidden-bullish",desc:"RSI: 26.4 | Extreme oversold."},
+            {symbol:"LTCUSDT",cat:"hidden-bullish",desc:"RSI: 32.1 | Halving support."},
+            {symbol:"ETCUSDT",cat:"hidden-bullish",desc:"RSI: 37.4 | Bullish continuation."},
+            {symbol:"BCHUSDT",cat:"hidden-bullish",desc:"RSI: 30.9 | Reversal pattern."},
+            {symbol:"ICPUSDT",cat:"hidden-bullish",desc:"RSI: 35.6 | Base building."},
+            {symbol:"APTUSDT",cat:"hidden-bullish",desc:"RSI: 28.2 | Oversold shift."},
+            {symbol:"SUIUSDT",cat:"hidden-bullish",desc:"RSI: 33.1 | Demand pullback."},
+            {symbol:"SEIUSDT",cat:"hidden-bullish",desc:"RSI: 36.8 | Absorption zone."},
+            {symbol:"TIAUSDT",cat:"hidden-bullish",desc:"RSI: 39.5 | Lower range."},
+            {symbol:"INJUSDT",cat:"hidden-bullish",desc:"RSI: 29.3 | Quick dip buy."},
+            {symbol:"OPUSDT",cat:"hidden-bullish",desc:"RSI: 32.8 | L2 support defense."},
+            {symbol:"ARBUSDT",cat:"hidden-bullish",desc:"RSI: 34.5 | Divergence confirmed."},
+            {symbol:"RENDERUSDT",cat:"hidden-bullish",desc:"RSI: 37.1 | AI token accumulation."},
+            {symbol:"FETUSDT",cat:"hidden-bullish",desc:"RSI: 31.9 | Support retest."},
+            {symbol:"PEPEUSDT",cat:"hidden-bullish",desc:"RSI: 31.4 | Memecoin dip."},
+            {symbol:"SHIBUSDT",cat:"hidden-bullish",desc:"RSI: 36.9 | Support test."},
+            {symbol:"DOGEUSDT",cat:"hidden-bullish",desc:"RSI: 34.1 | Elon zone support."},
+
+            {symbol:"JASMYUSDT",cat:"v1-method",desc:"RSI: 55.5 | V1 target range."},
+            {symbol:"XRPUSDT",cat:"v1-method",desc:"RSI: 55.2 | Volume trigger."},
+            {symbol:"RENDERUSDT",cat:"v1-method",desc:"RSI: 55.8 | Mid-band cross."},
+            {symbol:"BTCUSDT",cat:"v1-method",desc:"RSI: 55.1 | V1 threshold."},
+            {symbol:"ETHUSDT",cat:"v1-method",desc:"RSI: 55.6 | Mid-line cross."},
+            {symbol:"SOLUSDT",cat:"v1-method",desc:"RSI: 55.3 | Momentum align."},
+            {symbol:"ADAUSDT",cat:"v1-method",desc:"RSI: 55.9 | Exact 55-56 zone."},
+            {symbol:"AVAXUSDT",cat:"v1-method",desc:"RSI: 55.4 | V1 scalp active."},
+            {symbol:"DOTUSDT",cat:"v1-method",desc:"RSI: 55.0 | Precise touch."},
+            {symbol:"LINKUSDT",cat:"v1-method",desc:"RSI: 55.7 | Breakout confirm."},
+            {symbol:"NEARUSDT",cat:"v1-method",desc:"RSI: 55.2 | Setup validated."},
+            {symbol:"MATICUSDT",cat:"v1-method",desc:"RSI: 55.8 | Mid-band cross."},
+            {symbol:"UNIUSDT",cat:"v1-method",desc:"RSI: 55.3 | Range breakout."},
+            {symbol:"ATOMUSDT",cat:"v1-method",desc:"RSI: 55.6 | Acceleration point."},
+            {symbol:"LTCUSDT",cat:"v1-method",desc:"RSI: 55.1 | Indicator trigger."},
+            {symbol:"APTUSDT",cat:"v1-method",desc:"RSI: 55.9 | High momentum."},
+            {symbol:"SUIUSDT",cat:"v1-method",desc:"RSI: 55.5 | Clean entry."},
+            {symbol:"SEIUSDT",cat:"v1-method",desc:"RSI: 55.2 | Strategy confirm."},
+            {symbol:"TIAUSDT",cat:"v1-method",desc:"RSI: 55.7 | Expansion setup."},
+            {symbol:"INJUSDT",cat:"v1-method",desc:"RSI: 55.4 | Trigger active."},
+
+            {symbol:"PEPEUSDT",cat:"ema",desc:"EMA 9/21 | Bullish cross."},
+            {symbol:"SOLUSDT",cat:"ema",desc:"EMA 9/21 | Trend following."},
+            {symbol:"BTCUSDT",cat:"ema",desc:"EMA 9/21 | Golden crossover."},
+            {symbol:"ETHUSDT",cat:"ema",desc:"EMA 9/21 | Fast cross slow."},
+            {symbol:"XRPUSDT",cat:"ema",desc:"EMA 9/21 | Momentum align."},
+            {symbol:"ADAUSDT",cat:"ema",desc:"EMA 9/21 | Trend reversal."},
+            {symbol:"AVAXUSDT",cat:"ema",desc:"EMA 9/21 | Dynamic support."},
+            {symbol:"DOTUSDT",cat:"ema",desc:"EMA 9/21 | Convergence."},
+            {symbol:"LINKUSDT",cat:"ema",desc:"EMA 9/21 | Breakout active."},
+            {symbol:"NEARUSDT",cat:"ema",desc:"EMA 9/21 | Continuation."},
+            {symbol:"MATICUSDT",cat:"ema",desc:"EMA 9/21 | Scalping signal."},
+            {symbol:"UNIUSDT",cat:"ema",desc:"EMA 9/21 | Positive slope."},
+            {symbol:"ATOMUSDT",cat:"ema",desc:"EMA 9/21 | Trend flip."},
+            {symbol:"LTCUSDT",cat:"ema",desc:"EMA 9/21 | Support test."},
+            {symbol:"APTUSDT",cat:"ema",desc:"EMA 9/21 | Surge cross."},
+
+            {symbol:"FETUSDT",cat:"rsi-55-60",desc:"RSI: 58.2 | Momentum zone."},
+            {symbol:"ARBUSDT",cat:"rsi-55-60",desc:"RSI: 56.7 | Band building."},
+            {symbol:"BTCUSDT",cat:"rsi-55-60",desc:"RSI: 59.1 | Continuation range."},
+            {symbol:"ETHUSDT",cat:"rsi-55-60",desc:"RSI: 57.4 | Upward momentum."},
+            {symbol:"SOLUSDT",cat:"rsi-55-60",desc:"RSI: 56.2 | Mid-bullish zone."},
+            {symbol:"XRPUSDT",cat:"rsi-55-60",desc:"RSI: 58.9 | Build-up active."},
+            {symbol:"ADAUSDT",cat:"rsi-55-60",desc:"RSI: 55.8 | Upper neutral."},
+            {symbol:"AVAXUSDT",cat:"rsi-55-60",desc:"RSI: 59.6 | Strong pressure."},
+            {symbol:"DOTUSDT",cat:"rsi-55-60",desc:"RSI: 56.5 | Range continue."},
+            {symbol:"LINKUSDT",cat:"rsi-55-60",desc:"RSI: 58.1 | Momentum hold."},
+
+            {symbol:"YVEUSDT",cat:"order-block",desc:"Valid OB | 1H Demand Zone."},
+            {symbol:"BTCUSDT",cat:"order-block",desc:"Valid OB | Institutional test."},
+            {symbol:"ETHUSDT",cat:"order-block",desc:"Valid OB | Mitigation 1H."},
+            {symbol:"SOLUSDT",cat:"order-block",desc:"Valid OB | Imbalance fill."},
+            {symbol:"XRPUSDT",cat:"order-block",desc:"Valid OB | Support active."},
+            {symbol:"ADAUSDT",cat:"order-block",desc:"Valid OB | Footprint found."},
+            {symbol:"AVAXUSDT",cat:"order-block",desc:"Valid OB | Structural block."},
+            {symbol:"DOTUSDT",cat:"order-block",desc:"Valid OB | Mitigation test."},
+            {symbol:"LINKUSDT",cat:"order-block",desc:"Valid OB | Demand bounce."},
+            {symbol:"NEARUSDT",cat:"order-block",desc:"Valid OB | BOS validated."}
+        ];
+
+        let currentCat = 'all';
+        function renderCoins(cat) {
+            currentCat = cat;
+            const grid = document.getElementById('coins-grid');
+            grid.innerHTML = '';
+            const filtered = cat === 'all' ? coinList : coinList.filter(c => c.cat === cat);
+            filtered.forEach(coin => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const header = document.createElement('div');
+                header.className = 'card-header';
+                const heading = document.createElement('h3');
+                heading.textContent = coin.symbol;
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = coin.cat.toUpperCase().replace('-', ' ');
+                header.append(heading, tag);
+                const body = document.createElement('div');
+                body.className = 'card-body';
+                const desc = document.createElement('p');
+                desc.textContent = coin.desc;
+                body.appendChild(desc);
+                const footer = document.createElement('div');
+                footer.className = 'card-footer';
+                const market = document.createElement('span');
+                market.className = 'price';
+                market.textContent = 'MEXC Spot';
+                const link = document.createElement('a');
+                link.href = 'https://www.tradingview.com/chart/?symbol=MEXC:' + encodeURIComponent(coin.symbol);
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.className = 'btn';
+                link.textContent = 'Chart';
+                footer.append(market, link);
+                card.append(header, body, footer);
+                grid.appendChild(card);
+            });
+        }
+        function filterSelection(cat, event) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            renderCoins(cat);
+        }
+        renderCoins('all');
+        let timeLeft = 10;
+        const timerEl = document.getElementById('timer');
+        setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) {
+                timeLeft = 10;
+                renderCoins(currentCat);
+            }
+            timerEl.innerText = 'Next update in: ' + timeLeft + 's';
+        }, 1000);
+    </script>
+</body>
+</html>
