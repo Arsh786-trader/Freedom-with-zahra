@@ -3,187 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScalpPro - Crypto Scanning Terminal</title>
+    <title>Freedom With Zara - Dynamic Rotating Scanner</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #070b19; color: #f8fafc; padding: 6px; font-size: 11px; }
-
-        /* Top Header Bar */
-        .top-header { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 6px; }
-        .logo-area { display: flex; align-items: center; gap: 8px; }
-        .logo-badge { background: #10b981; color: #070b19; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px; }
-        .status-connected { color: #10b981; font-weight: bold; }
-        .top-right-nav { display: flex; align-items: center; gap: 10px; }
-        .admin-btn { background: #d97706; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 10px; }
+        body { background-color: #0b132b; color: #f8fafc; padding: 10px; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #1c2541; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #3a506b; font-size: 11px; flex-wrap: wrap; gap: 6px; }
+        .brand-badge { background: #00b4d8; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .status-dot { color: #2ec4b6; font-weight: bold; }
         .time-display { color: #38bdf8; font-weight: bold; }
-        .logout-btn { background: #ef4444; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 10px; }
-
-        /* Navigation Filters Bar */
-        .nav-bar { display: flex; gap: 10px; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 6px; align-items: center; overflow-x: auto; }
-        .nav-item { color: #9ca3af; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; display: flex; align-items: center; gap: 4px; padding: 4px 6px; border-radius: 4px; transition: 0.1s; }
-        .nav-item.active, .nav-item:hover { color: #38bdf8; background: #1e293b; }
-
-        /* Heatmap & Market Sentiment Banner */
-        .market-banner { display: flex; justify-content: space-between; align-items: center; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-        .brand-card-top { background: #1e293b; color: #38bdf8; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: 1px solid #334155; }
-        .heatmap-ranges { display: flex; gap: 6px; align-items: center; font-size: 10px; flex-wrap: wrap; }
-        .heat-badge { padding: 2px 5px; border-radius: 3px; font-weight: bold; color: #fff; font-size: 9px; }
-        .heat-10-20 { background: #7f1d1d; }
-        .heat-20-30 { background: #c2410c; }
-        .heat-30-40 { background: #1e3a8a; }
-        .heat-40-50 { background: #374151; }
-        .heat-50-60 { background: #14532d; }
-        .heat-gainers { background: #065f46; }
-        .market-sentiment { background: #1e293b; border: 1px solid #334155; padding: 4px 12px; border-radius: 4px; text-align: center; }
-        .market-sentiment span { color: #cbd5e1; font-weight: bold; font-size: 11px; letter-spacing: 1px; }
-
-        /* Main Workspace Layout (Left Grid + Right Sidebar) */
-        .workspace { display: flex; gap: 8px; }
-        .main-content { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-
-        /* Zone Section Styling */
-        .zone-box { background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; }
-        .zone-title { font-size: 11px; color: #94a3b8; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; font-weight: bold; }
         
-        .coin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 4px; max-height: 420px; overflow-y: auto; padding-right: 2px; }
-        .coin-cell { background: #172033; border: 1px solid #22304a; border-radius: 3px; padding: 4px; text-align: center; cursor: pointer; transition: 0.1s; }
-        .coin-cell:hover { border-color: #38bdf8; background: #1e293b; }
-        .coin-sym { font-weight: bold; color: #f1f5f9; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .coin-rsi { font-size: 9px; color: #94a3b8; margin-top: 2px; }
-        .coin-cell.gain { border-color: #065f46; }
-        .coin-cell.gain .coin-rsi { color: #34d399; }
-
-        /* Right Sidebar Styling */
-        .sidebar { width: 230px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; height: fit-content; }
-        .sidebar-section h4 { font-size: 10px; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1f2937; padding-bottom: 2px; margin-bottom: 5px; }
+        .lang-btn { background: #ffb703; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 11px; }
+        .lang-btn:hover { background: #f77f00; color: #fff; }
         
-        .top-mover-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px; padding: 3px 5px; background: #0b0f19; border-radius: 3px; }
-        .top-mover-row span:last-child { color: #34d399; font-weight: bold; }
+        .sub-header { text-align: center; margin-bottom: 12px; }
+        .sub-header h1 { color: #00b4d8; font-size: 18px; margin-bottom: 3px; }
+        .sub-header p { color: #8d99ae; font-size: 11px; }
+        .timer-text { color: #2ec4b6; font-weight: bold; font-size: 11px; margin-top: 2px; }
 
-        .scanner-toggle-row { display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 3px; color: #94a3b8; }
-        .scanner-toggle-row input { accent-color: #38bdf8; cursor: pointer; }
+        .search-container { margin-bottom: 12px; text-align: center; }
+        .search-input { width: 100%; max-width: 400px; padding: 8px 12px; background-color: #1c2541; border: 1px solid #3a506b; border-radius: 6px; color: #fff; font-size: 12px; outline: none; transition: border 0.2s; }
+        .search-input:focus { border-color: #00b4d8; }
 
-        .chart-setting-box select { width: 100%; padding: 4px; background: #0b0f19; color: #fff; border: 1px solid #1f2937; border-radius: 3px; font-size: 10px; margin-bottom: 5px; }
+        .nav-container { display: flex; overflow-x: auto; gap: 6px; margin-bottom: 15px; padding-bottom: 5px; }
+        .nav-btn { background-color: #1c2541; color: #cbd5e1; border: 1px solid #3a506b; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; }
+        .nav-btn:hover, .nav-btn.active { background-color: #00b4d8; color: #fff; border-color: #00b4d8; }
 
-        .branding-card { background: #0b0f19; border: 1px solid #1f2937; border-radius: 4px; padding: 6px; text-align: center; }
-        .branding-card h3 { font-size: 11px; color: #38bdf8; margin-bottom: 2px; }
-        .branding-card p { font-size: 9px; color: #94a3b8; margin-bottom: 3px; }
-        .contact-label { font-size: 9px; color: #10b981; font-weight: bold; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+        .card { background-color: #1c2541; border-radius: 6px; padding: 10px; border: 1px solid #3a506b; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .card-header h3 { color: #fff; font-size: 13px; font-weight: bold; }
+        .tag { background-color: #0b132b; color: #2ec4b6; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid #1d3557; }
+        
+        .card-body p { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+        
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #283845; padding-top: 6px; }
+        .price { font-size: 11px; font-weight: bold; color: #ffd166; }
+        
+        .btn { background-color: #2ec4b6; color: #0b132b; padding: 3px 10px; border-radius: 3px; text-decoration: none; font-weight: bold; font-size: 10px; }
+        .btn:hover { background-color: #20b2aa; }
     </style>
 </head>
 <body>
-
-    <!-- Top Header Bar with Live Pakistan Time -->
-    <header class="top-header">
-        <div class="logo-area">
-            <span style="font-weight: bold; font-size: 12px; color: #fff;">ScalpPro</span>
-            <span class="logo-badge">v2.4.9</span>
-            <span class="status-connected">● Connected</span>
-            <span style="color: #9ca3af; font-size: 10px;">Ultra Pro</span>
-        </div>
-        <div class="top-right-nav">
-            <button class="admin-btn">Admin Panel</button>
-            <span class="time-display" id="pkTime">📍 Pakistan 🇵🇰 Loading...</span>
-            <button class="logout-btn">Logout</button>
-        </div>
-    </header>
-
-    <!-- Navigation Filters Bar (All Mexc first, Order Block next to Alpha Sniper) -->
-    <nav class="nav-bar">
-        <button class="nav-item active" onclick="filterCategory('allMexc', event)">🌐 All Mexc</button>
-        <button class="nav-item" onclick="filterCategory('dashboard', event)">📊 Dashboard</button>
-        <button class="nav-item" onclick="filterCategory('v1', event)">🔥 V1 Scalping</button>
-        <button class="nav-item" onclick="filterCategory('ob', event)">🧱 Order Block</button>
-        <button class="nav-item" onclick="filterCategory('sniper', event)">⚡ Alpha Sniper</button>
-        <button class="nav-item" onclick="filterCategory('ema', event)">📈 EMA Crossover</button>
-        <button class="nav-item" onclick="filterCategory('hb', event)">💎 Hidden Bullish</button>
-        <button class="nav-item" onclick="filterCategory('binance', event)">🟡 Binance Rise Watch</button>
-    </nav>
-
-    <!-- Market Heatmap & Sentiment Banner -->
-    <div class="market-banner">
-        <div class="brand-card-top">FreedomWithAahad</div>
-        <div class="heatmap-ranges">
-            <span style="color: #94a3b8; font-weight: bold;">RSI Heatmap</span>
-            <span style="color: #10b981;">LIVE</span>
-            <span class="heat-badge heat-10-20">10-20 Extreme</span>
-            <span class="heat-badge heat-20-30">20-30 Oversold</span>
-            <span class="heat-badge heat-30-40">30-40 Hidden Bull & ICT</span>
-            <span class="heat-badge heat-40-50">40-50 Neutral</span>
-            <span class="heat-badge heat-50-60">50-60 V1 Zone</span>
-            <span class="heat-badge heat-gainers">60+ Gainers</span>
-        </div>
-        <div class="market-sentiment">
-            <span>➡️ NEUTRAL</span>
-        </div>
-    </div>
-
-    <!-- Main Workspace Layout -->
-    <div class="workspace">
-        
-        <!-- Left Content Area (Zones with Large Grids) -->
-        <div class="main-content">
-            
-            <!-- Gainers Zone -->
-            <div class="zone-box">
-                <div class="zone-title" id="zone1Title">⚡ Gainers Zone <span style="font-weight: normal; color: #64748b;" id="gainersCount">(0 coins)</span></div>
-                <div class="coin-grid" id="gainersGrid">
-                    <!-- Dynamic Coins -->
-                </div>
-            </div>
-
-            <!-- V1 Zone -->
-            <div class="zone-box">
-                <div class="zone-title" id="zone2Title">🔥 V1 Zone <span style="font-weight: normal; color: #64748b;" id="v1Count">(0 coins)</span></div>
-                <div class="coin-grid" id="v1Grid">
-                    <!-- Dynamic Coins -->
-                </div>
-            </div>
-
+    <div class="container">
+        <div class="top-bar">
+            <span class="brand-badge" id="brand-text">Freedom With Zara</span>
+            <span class="status-dot">● Live Auto-Rotating</span>
+            <span class="time-display" id="pkTime">📍 PKT Loading...</span>
+            <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle-btn">اردو (Urdu)</button>
         </div>
 
-        <!-- Right Sidebar Panel -->
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <h4>🔥 Top Movers</h4>
-                <div class="top-mover-row"><span>CHIP</span><span>+17.8%</span></div>
-                <div class="top-mover-row"><span>BEAMX</span><span>+14.5%</span></div>
-                <div class="top-mover-row"><span>BANK</span><span>+10.6%</span></div>
-                <div class="top-mover-row"><span>PARTI</span><span>+12.0%</span></div>
-                <div class="top-mover-row"><span>KAT</span><span>+15.2%</span></div>
-            </div>
+        <div class="sub-header">
+            <h1 id="main-title">MEXC Dynamic Rotating Scanner</h1>
+            <p id="sub-title">New Coins Rotating Automatically Every 10s</p>
+            <div class="timer-text" id="timer">Next rotation in: 10s</div>
+        </div>
 
-            <div class="sidebar-section">
-                <h4>⚡ Active Scanners</h4>
-                <div class="scanner-toggle-row"><span>V1 Scalping</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>Order Block</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>EMA Crossover</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>Hidden Bullish</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>Alpha Sniper</span><input type="checkbox" checked></div>
-            </div>
+        <div class="search-container">
+            <input type="text" id="coinSearch" class="search-input" placeholder="Search any MEXC coin (e.g., BTC, PEPE)..." onkeyup="filterBySearch()">
+        </div>
 
-            <div class="sidebar-section chart-setting-box">
-                <h4>📊 Chart Settings</h4>
-                <div style="font-size: 9px; color: #94a3b8; margin-bottom: 3px;">TradingView Timeframe</div>
-                <select>
-                    <option>1H</option>
-                    <option>15M</option>
-                    <option>4H</option>
-                    <option>1D</option>
-                </select>
-            </div>
+        <!-- Navigation Bar: 'All Mexc' added first & 'Alpha Sniper' placed right next to '1H Order Block' -->
+        <div class="nav-container">
+            <button class="nav-btn active" onclick="filterSelection('all', event)" id="nav-all">🌐 All Mexc</button>
+            <button class="nav-btn" onclick="filterSelection('hidden-bullish', event)" id="nav-hb">Hidden Bullish (25-40 RSI)</button>
+            <button class="nav-btn" onclick="filterSelection('v1-method', event)" id="nav-v1">V1 Scalping (55-56 RSI)</button>
+            <button class="nav-btn" onclick="filterSelection('rsi-55-60', event)" id="nav-rsi">RSI 55-60 Range</button>
+            <button class="nav-btn" onclick="filterSelection('ema', event)" id="nav-ema">EMA Crossover</button>
+            <button class="nav-btn" onclick="filterSelection('order-block', event)" id="nav-ob">1H Order Block</button>
+            <button class="nav-btn" onclick="filterSelection('alpha-sniper', event)" id="nav-sniper">⚡ Alpha Sniper</button>
+        </div>
 
-            <div class="branding-card">
-                <h3>Freedom With Aahad</h3>
-                <p>Protect your capital and set alerts with quality tokens.</p>
-                <div class="contact-label">CONTACT US</div>
-                <div style="font-size: 9px; color: #38bdf8; margin-top: 2px;">📱 +923184434787</div>
-            </div>
-        </aside>
-
+        <div class="grid" id="coins-grid"></div>
     </div>
 
     <script>
+        let currentLang = 'en';
+
         // Live Pakistan Standard Time (PKT) Clock
         function updatePakistanTime() {
             const options = { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
@@ -193,75 +93,168 @@
         setInterval(updatePakistanTime, 1000);
         updatePakistanTime();
 
-        const masterMexcCoins = [
-            "BTC", "ETH", "SOL", "XRP", "KAS", "ADA", "DOT", "LINK", "FET", "ARB", 
-            "RENDER", "SUI", "JASMY", "DOGE", "AVAX", "NEAR", "MATIC", "OP", "ATOM", "UNI",
-            "APT", "INJ", "TIA", "SEI", "PEPE", "SHIB", "FLOKI", "BONK", "WIF", "ICP", 
-            "GRT", "RUNE", "STX", "IMX", "SFP", "BOME", "SLERF", "POPCAT", "MEW", "NOT",
-            "ZETA", "PIXEL", "PORTAL", "AXL", "MANTA", "ALT", "DYM", "XAI", "ACE", "NFP", 
-            "AI", "XLM", "BCH", "LTC", "ETC", "HBAR", "VET", "QNT", "ALGO", "AR", 
-            "MKR", "AAVE", "SNX", "STRK", "BLUR", "TSLAB", "PARTI", "LITEV", "NOKE", "SED", 
-            "BANK", "ARMS", "GNTS", "NIGHT", "CHIP", "TSMB", "NTWS", "INTGB", "COMRB", "AVGOR", 
-            "STXB", "SKLBS", "AAOIR", "RINI", "SIMHB", "GENIUS", "WDCB", "AXTB", "BOXLS", "AMATS", 
-            "HOME", "CRWVB", "DELLE", "SHAZB", "SPK", "AUGPB", "CROOB", "AMDB", "ENSO", "MSFTB", 
-            "MUIG", "PYTH", "NVDAB", "OLWS", "ZK", "ASTER", "POL", "BROCCOLIFIN", "PROVE", "MRIVLE", 
-            "ADMLS", "HAZDAL", "USUAL", "CAKE", "XAT", "AWE", "WAVP", "LUMIA", "MVLLB", "LPT", 
-            "GIGGLE", "KOMAS", "SKHYS", "SWIRL", "GCOMS", "BARY", "ASTSB", "SPYB", "MEGA", "TRUMP", 
-            "ZAMA", "VWYB", "JTG", "WUR", "MOM", "CELO", "GLMR", "ZRX", "ONDO", "NXPC", 
-            "PAXS", "SYN", "ZIL", "SNO", "MOVR", "BLUSD", "EDEN", "ETHFI"
-        ];
-
-        // Specific coins for Alpha Sniper filter
-        const sniperCoins = ["SOL", "RENDER", "INJ", "TIA", "SEI", "PEPE", "FET", "NEAR", "SUI", "DOGE", "APT", "RUNE", "KAS", "ARB"];
-
-        function renderGrid(containerId, countId, symbols, isGain) {
-            const container = document.getElementById(containerId);
-            const countEl = document.getElementById(countId);
-            container.innerHTML = '';
-            
-            symbols.forEach(sym => {
-                let rsiVal = (Math.random() * (75 - 30) + 30).toFixed(1);
-                let cell = document.createElement('div');
-                cell.className = `coin-cell ${isGain ? 'gain' : ''}`;
-                cell.innerHTML = `
-                    <div class="coin-sym">${sym}USDT</div>
-                    <div class="coin-rsi">RSI: ${rsiVal}</div>
-                `;
-                cell.onclick = () => {
-                    window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${sym}USDT`, '_blank');
-                };
-                container.appendChild(cell);
-            });
-            countEl.innerText = `(${symbols.length} coins)`;
-        }
-
-        function filterCategory(category, event) {
-            let navButtons = document.querySelectorAll('.nav-item');
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            if(event) event.target.classList.add('active');
-
-            if(category === 'allMexc') {
-                document.getElementById('zone1Title').innerHTML = '⚡ Gainers Zone <span style="font-weight: normal; color: #64748b;" id="gainersCount">(0 coins)</span>';
-                document.getElementById('zone2Title').innerHTML = '🔥 V1 Zone <span style="font-weight: normal; color: #64748b;" id="v1Count">(0 coins)</span>';
-                renderGrid('gainersGrid', 'gainersCount', masterMexcCoins, true);
-                renderGrid('v1Grid', 'v1Count', masterMexcCoins.slice(50), false);
-            } else if(category === 'sniper') {
-                document.getElementById('zone1Title').innerHTML = '⚡ Alpha Sniper Zone <span style="font-weight: normal; color: #64748b;" id="gainersCount">(0 coins)</span>';
-                document.getElementById('zone2Title').innerHTML = '🎯 Sniper Targets <span style="font-weight: normal; color: #64748b;" id="v1Count">(0 coins)</span>';
-                renderGrid('gainersGrid', 'gainersCount', sniperCoins, true);
-                renderGrid('v1Grid', 'v1Count', sniperCoins.slice(0, 6), false);
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ur' : 'en';
+            if(currentLang === 'ur') {
+                document.getElementById('brand-text').innerText = 'فریडम ود زارا';
+                document.getElementById('lang-toggle-btn').innerText = 'English';
+                document.getElementById('main-title').innerText = 'ایم ای ایکس سی ڈائنامک روٹیٹنگ اسکینر';
+                document.getElementById('sub-title').innerText = 'ہر 10 سیکنڈ بعد نئے کوئنز خود بخود تبدیل ہو رہے ہیں';
+                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں (جیسے: BTC, PEPE)...';
+                document.getElementById('nav-all').innerText = '🌐 سب MEXC';
+                document.getElementById('nav-hb').innerText = 'ہڈن بلش (25-40 RSI)';
+                document.getElementById('nav-v1').innerText = 'V1 اسکالپنگ (55-56 RSI)';
+                document.getElementById('nav-rsi').innerText = 'RSI 55-60 رینج';
+                document.getElementById('nav-ema').innerText = 'EMA کرॉसओवर';
+                document.getElementById('nav-ob').innerText = '1H آرڈر بلاک';
+                document.getElementById('nav-sniper').innerText = '⚡ الفا اسنائپر';
             } else {
-                document.getElementById('zone1Title').innerHTML = '⚡ Gainers Zone <span style="font-weight: normal; color: #64748b;" id="gainersCount">(0 coins)</span>';
-                document.getElementById('zone2Title').innerHTML = '🔥 V1 Zone <span style="font-weight: normal; color: #64748b;" id="v1Count">(0 coins)</span>';
-                let shuffled = [...masterMexcCoins].sort(() => 0.5 - Math.random());
-                renderGrid('gainersGrid', 'gainersCount', shuffled.slice(0, 45), true);
-                renderGrid('v1Grid', 'v1Count', shuffled.slice(45, 95), false);
+                document.getElementById('brand-text').innerText = 'Freedom With Zara';
+                document.getElementById('lang-toggle-btn').innerText = 'English';
+                document.getElementById('main-title').innerText = 'MEXC Dynamic Rotating Scanner';
+                document.getElementById('sub-title').innerText = 'New Coins Rotating Automatically Every 10s';
+                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin (e.g., BTC, PEPE)...';
+                document.getElementById('nav-all').innerText = '🌐 All Mexc';
+                document.getElementById('nav-hb').innerText = 'Hidden Bullish (25-40 RSI)';
+                document.getElementById('nav-v1').innerText = 'V1 Scalping (55-56 RSI)';
+                document.getElementById('nav-rsi').innerText = 'RSI 55-60 Range';
+                document.getElementById('nav-ema').innerText = 'EMA Crossover';
+                document.getElementById('nav-ob').innerText = '1H Order Block';
+                document.getElementById('nav-sniper').innerText = '⚡ Alpha Sniper';
             }
         }
 
-        // Initial Load
-        renderGrid('gainersGrid', 'gainersCount', masterMexcCoins, true);
-        renderGrid('v1Grid', 'v1Count', masterMexcCoins.slice(50), false);
+        const fullMasterPool = [
+            "BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "KASUSDT", 
+            "ADAUSDT", "DOTUSDT", "LINKUSDT", "FETUSDT", "ARBUSDT", 
+            "RENDERUSDT", "SUIUSDT", "JASMYUSDT", "DOGEUSDT", "AVAXUSDT",
+            "NEARUSDT", "MATICUSDT", "OPUSDT", "ATOMUSDT", "UNIUSDT",
+            "APTUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT",
+            "SHIBUSDT", "FLOKIUSDT", "BONKUSDT", "WIFUSDT", "ICPUSDT", 
+            "GRTUSDT", "RUNEUSDT", "STXUSDT", "IMXUSDT", "SFPUSDT",
+            "BOMEUSDT", "SLERFUSDT", "POPCATUSDT", "MEWUSDT", "NOTUSDT",
+            "ZETAUSDT", "PIXELUSDT", "PORTALUSDT", "AXLUSDT", "MANTAUSDT"
+        ];
+
+        // Specific Alpha Sniper coins list
+        const sniperCoinsList = ["SOLUSDT", "RENDERUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT", "FETUSDT", "NEARUSDT", "SUIUSDT", "DOGEUSDT"];
+
+        let currentCat = 'all';
+
+        function generateRotatingData() {
+            let shuffled = [...fullMasterPool].sort(() => 0.5 - Math.random());
+            let list = [];
+            let index = 0;
+
+            for(let i = 0; i < 3; i++) {
+                let rsiVal = (Math.random() * (40 - 25) + 25).toFixed(1);
+                list.push({ symbol: shuffled[index++], cat: "hidden-bullish", desc: `MEXC Spot | RSI: ${rsiVal} (Strict 25-40)` });
+            }
+
+            for(let i = 0; i < 3; i++) {
+                let rsiVal = (Math.random() * (56 - 55) + 55).toFixed(1);
+                list.push({ symbol: shuffled[index++], cat: "v1-method", desc: `MEXC Spot | RSI: ${rsiVal} (V1 55-56 Range)` });
+            }
+
+            for(let i = 0; i < 3; i++) {
+                let rsiVal = (Math.random() * (60 - 55) + 55).toFixed(1);
+                list.push({ symbol: shuffled[index++], cat: "rsi-55-60", desc: `MEXC Spot | RSI: ${rsiVal} (Range 55-60)` });
+            }
+
+            for(let i = 0; i < 2; i++) {
+                list.push({ symbol: shuffled[index++], cat: "ema", desc: `MEXC Spot | EMA 9/21 Crossover Active` });
+            }
+
+            for(let i = 0; i < 2; i++) {
+                list.push({ symbol: shuffled[index++], cat: "order-block", desc: `MEXC Spot | 1H Order Block Zone` });
+            }
+
+            // Add Alpha Sniper items into master pool rotation too
+            sniperCoinsList.forEach(sym => {
+                list.push({ symbol: sym, cat: "alpha-sniper", desc: `MEXC Spot | Alpha Sniper Target Setup` });
+            });
+
+            return list;
+        }
+
+        let coinList = generateRotatingData();
+
+        function renderCoins(coinsToRender) {
+            const grid = document.getElementById('coins-grid');
+            grid.innerHTML = '';
+            
+            coinsToRender.forEach(coin => {
+                let card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3>${coin.symbol}</h3>
+                        <span class="tag">${coin.cat.toUpperCase().replace('-', ' ')}</span>
+                    </div>
+                    <div class="card-body">
+                        <p>${coin.desc}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">MEXC Live</span>
+                        <a href="https://www.tradingview.com/chart/?symbol=MEXC:${coin.symbol}" target="_blank" class="btn">Chart</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterSelection(cat, event) {
+            currentCat = cat;
+            let buttons = document.getElementsByClassName('nav-btn');
+            for(let btn of buttons) btn.classList.remove('active');
+            if(event) event.target.classList.add('active');
+            
+            document.getElementById('coinSearch').value = '';
+
+            let filtered;
+            if(cat === 'all') {
+                filtered = coinList.filter(c => c.cat !== 'alpha-sniper'); // 'All' shows general rotating scanner items
+            } else if(cat === 'alpha-sniper') {
+                filtered = coinList.filter(c => c.cat === 'alpha-sniper'); // Only shows exact alpha sniper coins
+            } else {
+                filtered = coinList.filter(c => c.cat === cat);
+            }
+            renderCoins(filtered);
+        }
+
+        function filterBySearch() {
+            let query = document.getElementById('coinSearch').value.toUpperCase().trim();
+            
+            if(query !== "") {
+                let searchResult = [{
+                    symbol: query.includes("USDT") ? query : query + "USDT",
+                    cat: "searched",
+                    desc: `MEXC Live Spot | Manual Search Match`
+                }];
+                renderCoins(searchResult);
+            } else {
+                let filtered = currentCat === 'all' ? coinList.filter(c => c.cat !== 'alpha-sniper') : (currentCat === 'alpha-sniper' ? coinList.filter(c => c.cat === 'alpha-sniper') : coinList.filter(c => c.cat === currentCat));
+                renderCoins(filtered);
+            }
+        }
+
+        // Initial Load (Default view showing All rotating items excluding sniper from general grid)
+        renderCoins(coinList.filter(c => c.cat !== 'alpha-sniper'));
+
+        let timeLeft = 10;
+        const timerEl = document.getElementById('timer');
+        setInterval(() => {
+            timeLeft--;
+            if(timeLeft < 0) {
+                timeLeft = 10;
+                if(!document.getElementById('coinSearch').value) {
+                    coinList = generateRotatingData();
+                    let filtered = currentCat === 'all' ? coinList.filter(c => c.cat !== 'alpha-sniper') : (currentCat === 'alpha-sniper' ? coinList.filter(c => c.cat === 'alpha-sniper') : coinList.filter(c => c.cat === currentCat));
+                    renderCoins(filtered);
+                }
+            }
+            timerEl.innerText = (currentLang === 'ur' ? "اگلی روٹیشن میں: " : "Next rotation in: ") + timeLeft + "s";
+        }, 1000);
     </script>
 </body>
 </html>
