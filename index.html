@@ -34,23 +34,23 @@
         .search-input { width: 100%; max-width: 400px; padding: 6px 10px; background-color: #111827; border: 1px solid #1f2937; border-radius: 6px; color: #fff; font-size: 11px; outline: none; }
         .search-input:focus { border-color: #38bdf8; }
 
-        /* Workspace Layout */
-        .workspace { display: flex; gap: 8px; align-items: flex-start; }
+        /* Workspace Layout - STRICT FLEX CONTAINER TO KEEP SIDEBAR FIXED ON RIGHT */
+        .workspace { display: flex; flex-direction: row; gap: 8px; align-items: flex-start; width: 100%; }
         .main-content { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
         /* Zone Section Styling */
         .zone-box { background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; }
         .zone-title { font-size: 11px; color: #94a3b8; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; font-weight: bold; }
         
-        .coin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; max-height: 480px; overflow-y: auto; padding-right: 2px; }
+        .coin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 480px; overflow-y: auto; padding-right: 2px; }
         .coin-cell { background: #172033; border: 1px solid #22304a; border-radius: 4px; padding: 6px; text-align: center; cursor: pointer; transition: 0.1s; }
         .coin-cell:hover { border-color: #38bdf8; background: #1e293b; }
         .coin-sym { font-weight: bold; color: #f1f5f9; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .coin-desc { font-size: 9px; color: #94a3b8; margin-top: 3px; }
         .coin-action { font-size: 9px; color: #38bdf8; margin-top: 4px; font-weight: bold; }
 
-        /* Right Sidebar Styling - FIXED & FORCED VISIBLE */
-        .sidebar { width: 220px; min-width: 220px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+        /* Right Sidebar Styling - FORCED FIXED WIDTH ON RIGHT */
+        .sidebar { width: 230px; min-width: 230px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         .sidebar-section h4 { font-size: 10px; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1f2937; padding-bottom: 2px; margin-bottom: 5px; }
         
         .top-mover-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px; padding: 3px 5px; background: #0b0f19; border-radius: 3px; }
@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <!-- Right Sidebar Panel -->
+        <!-- Right Sidebar Panel - Restored & Locked -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h4>🔥 Top Movers</h4>
