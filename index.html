@@ -6,49 +6,66 @@
     <title>Freedom With Zara - Dynamic Rotating Scanner</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0b132b; color: #f8fafc; padding: 10px; }
+        body { background-color: #070b19; color: #f8fafc; padding: 10px; }
         
-        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #1c2541; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #3a506b; font-size: 11px; }
-        .brand-badge { background: #00b4d8; color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
-        .status-dot { color: #2ec4b6; font-weight: bold; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #131a28; padding: 8px 12px; border-radius: 6px; margin-bottom: 10px; border: 1px solid #1f293d; font-size: 11px; }
+        .brand-badge { background: #38bdf8; color: #070b19; padding: 3px 8px; border-radius: 4px; font-weight: bold; }
+        .status-dot { color: #22c55e; font-weight: bold; }
         
-        .lang-btn { background: #ffb703; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 11px; }
-        .lang-btn:hover { background: #f77f00; color: #fff; }
+        .lang-btn { background: #f59e0b; color: #000; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 11px; }
+        .lang-btn:hover { background: #d97706; color: #fff; }
         
         .sub-header { text-align: center; margin-bottom: 12px; }
-        .sub-header h1 { color: #00b4d8; font-size: 18px; margin-bottom: 3px; }
-        .sub-header p { color: #8d99ae; font-size: 11px; }
-        .timer-text { color: #2ec4b6; font-weight: bold; font-size: 11px; margin-top: 2px; }
+        .sub-header h1 { color: #38bdf8; font-size: 18px; margin-bottom: 3px; }
+        .sub-header p { color: #94a3b8; font-size: 11px; }
+        .timer-text { color: #22c55e; font-weight: bold; font-size: 11px; margin-top: 2px; }
 
         .search-container { margin-bottom: 12px; text-align: center; }
-        .search-input { width: 100%; max-width: 400px; padding: 8px 12px; background-color: #1c2541; border: 1px solid #3a506b; border-radius: 6px; color: #fff; font-size: 12px; outline: none; transition: border 0.2s; }
-        .search-input:focus { border-color: #00b4d8; }
+        .search-input { width: 100%; max-width: 400px; padding: 8px 12px; background-color: #131a28; border: 1px solid #1f293d; border-radius: 6px; color: #fff; font-size: 12px; outline: none; transition: border 0.2s; }
+        .search-input:focus { border-color: #38bdf8; }
 
         .nav-container { display: flex; overflow-x: auto; gap: 6px; margin-bottom: 15px; padding-bottom: 5px; }
-        .nav-btn { background-color: #1c2541; color: #cbd5e1; border: 1px solid #3a506b; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; }
-        .nav-btn:hover, .nav-btn.active { background-color: #00b4d8; color: #fff; border-color: #00b4d8; }
+        .nav-btn { background-color: #131a28; color: #cbd5e1; border: 1px solid #1f293d; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; }
+        .nav-btn:hover, .nav-btn.active { background-color: #38bdf8; color: #070b19; border-color: #38bdf8; }
 
-        .container { max-width: 900px; margin: 0 auto; }
+        /* Layout with Right Sidebar */
+        .main-layout { display: flex; gap: 12px; max-width: 1200px; margin: 0 auto; }
+        .content-area { flex: 1; }
         
+        .sidebar { width: 260px; background-color: #131a28; border: 1px solid #1f293d; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 15px; height: fit-content; }
+        
+        .sidebar-section h4 { font-size: 11px; color: #38bdf8; margin-bottom: 8px; text-transform: uppercase; border-bottom: 1px solid #1f293d; padding-bottom: 4px; }
+        .top-mover-item { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px; padding: 3px 6px; background: #0b0f19; border-radius: 4px; }
+        .top-mover-item span:last-child { color: #22c55e; font-weight: bold; }
+
+        .active-scanner-row { display: flex; align-items: center; justify-content: space-between; font-size: 11px; margin-bottom: 6px; color: #94a3b8; }
+        .active-scanner-row input { accent-color: #38bdf8; cursor: pointer; }
+
+        .chart-settings select { width: 100%; padding: 6px; background: #0b0f19; color: #fff; border: 1px solid #1f293d; border-radius: 4px; font-size: 11px; margin-bottom: 8px; }
+
+        .brand-box { background: #0b0f19; border: 1px solid #1f293d; border-radius: 6px; padding: 10px; text-align: center; }
+        .brand-box h3 { font-size: 12px; color: #38bdf8; margin-bottom: 4px; }
+        .brand-box p { font-size: 10px; color: #94a3b8; }
+
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-        @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
-        .card { background-color: #1c2541; border-radius: 6px; padding: 10px; border: 1px solid #3a506b; display: flex; flex-direction: column; justify-content: space-between; }
+        .card { background-color: #131a28; border-radius: 6px; padding: 10px; border: 1px solid #1f293d; display: flex; flex-direction: column; justify-content: space-between; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .card-header h3 { color: #fff; font-size: 13px; font-weight: bold; }
-        .tag { background-color: #0b132b; color: #2ec4b6; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid #1d3557; }
+        .card-header h3 { color: #fff; font-size: 12px; font-weight: bold; }
+        .tag { background-color: #070b19; color: #38bdf8; padding: 2px 5px; border-radius: 3px; font-size: 9px; font-weight: bold; border: 1px solid #1f293d; }
         
-        .card-body p { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+        .card-body p { font-size: 10px; color: #94a3b8; margin-bottom: 6px; }
         
-        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #283845; padding-top: 6px; }
-        .price { font-size: 11px; font-weight: bold; color: #ffd166; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f293d; padding-top: 6px; }
+        .price { font-size: 10px; font-weight: bold; color: #facc15; }
         
-        .btn { background-color: #2ec4b6; color: #0b132b; padding: 3px 10px; border-radius: 3px; text-decoration: none; font-weight: bold; font-size: 10px; }
-        .btn:hover { background-color: #20b2aa; }
+        .btn { background-color: #38bdf8; color: #070b19; padding: 3px 10px; border-radius: 3px; text-decoration: none; font-weight: bold; font-size: 10px; }
+        .btn:hover { background-color: #0ea5e9; color: #fff; }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div style="max-width: 1200px; margin: 0 auto;">
         <div class="top-bar">
             <span class="brand-badge" id="brand-text">Freedom With Zara</span>
             <span class="status-dot">● Live Auto-Rotating</span>
@@ -74,7 +91,47 @@
             <button class="nav-btn" onclick="filterSelection('order-block', event)" id="nav-ob">1H Order Block</button>
         </div>
 
-        <div class="grid" id="coins-grid"></div>
+        <!-- Main Layout with Sidebar -->
+        <div class="main-layout">
+            <div class="content-area">
+                <div class="grid" id="coins-grid"></div>
+            </div>
+
+            <!-- Right Sidebar (Jaise aapki tasvir mein hai) -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h4>🔥 Top Movers</h4>
+                    <div class="top-mover-item"><span>CHIP</span><span>+17.8%</span></div>
+                    <div class="top-mover-item"><span>BEAMX</span><span>+14.5%</span></div>
+                    <div class="top-mover-item"><span>BANK</span><span>+10.6%</span></div>
+                    <div class="top-mover-item"><span>PARTI</span><span>+9.8%</span></div>
+                    <div class="top-mover-item"><span>KAT</span><span>+8.2%</span></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h4>⚡ Active Scanners</h4>
+                    <div class="active-scanner-row"><span>V1 Scalping</span><input type="checkbox" checked></div>
+                    <div class="active-scanner-row"><span>Order Block</span><input type="checkbox" checked></div>
+                    <div class="active-scanner-row"><span>EMA Crossover</span><input type="checkbox" checked></div>
+                    <div class="active-scanner-row"><span>Hidden Bullish</span><input type="checkbox" checked></div>
+                    <div class="active-scanner-row"><span>Alpha Sniper</span><input type="checkbox" checked></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h4>📊 Chart Settings</h4>
+                    <select>
+                        <option>TradingView Timeframe: 1H</option>
+                        <option>TradingView Timeframe: 15M</option>
+                        <option>TradingView Timeframe: 4H</option>
+                    </select>
+                </div>
+
+                <div class="brand-box">
+                    <h3>Freedom With Zara</h3>
+                    <p>Protect your capital and set alerts with quality tokens.</p>
+                </div>
+            </aside>
+        </div>
     </div>
 
     <script>
@@ -109,7 +166,6 @@
             }
         }
 
-        // Bohat bara master pool jismein se har dafa bilkul naye coins select honge
         const fullMasterPool = [
             "BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "KASUSDT", 
             "ADAUSDT", "DOTUSDT", "LINKUSDT", "FETUSDT", "ARBUSDT", 
@@ -125,35 +181,29 @@
         let currentCat = 'all';
 
         function generateRotatingData() {
-            // Pool ko har bar mukammal shuffle kar ke naye coins nikalna
             let shuffled = [...fullMasterPool].sort(() => 0.5 - Math.random());
             let list = [];
             let index = 0;
 
-            // 1. Hidden Bullish (Strictly 25 to 40 RSI)
             for(let i = 0; i < 3; i++) {
                 let rsiVal = (Math.random() * (40 - 25) + 25).toFixed(1);
                 list.push({ symbol: shuffled[index++], cat: "hidden-bullish", desc: `MEXC Spot | RSI: ${rsiVal} (Strict 25-40)` });
             }
 
-            // 2. V1 Scalping Method (Strictly 55 to 56 RSI)
             for(let i = 0; i < 3; i++) {
                 let rsiVal = (Math.random() * (56 - 55) + 55).toFixed(1);
                 list.push({ symbol: shuffled[index++], cat: "v1-method", desc: `MEXC Spot | RSI: ${rsiVal} (V1 55-56 Range)` });
             }
 
-            // 3. RSI 55-60 Range
             for(let i = 0; i < 3; i++) {
                 let rsiVal = (Math.random() * (60 - 55) + 55).toFixed(1);
                 list.push({ symbol: shuffled[index++], cat: "rsi-55-60", desc: `MEXC Spot | RSI: ${rsiVal} (Range 55-60)` });
             }
 
-            // 4. EMA Crossover
             for(let i = 0; i < 2; i++) {
                 list.push({ symbol: shuffled[index++], cat: "ema", desc: `MEXC Spot | EMA 9/21 Crossover Active` });
             }
 
-            // 5. 1H Order Block
             for(let i = 0; i < 2; i++) {
                 list.push({ symbol: shuffled[index++], cat: "order-block", desc: `MEXC Spot | 1H Order Block Zone` });
             }
@@ -223,10 +273,9 @@
             timeLeft--;
             if(timeLeft < 0) {
                 timeLeft = 10;
-                // Jab user search nahi kar raha hoga, toh har 10s baad bilkul naye coins rotate ho kar aayenge!
                 if(!document.getElementById('coinSearch').value) {
                     coinList = generateRotatingData();
-                    let filtered = currentCat === 'all' ? coinList : coinList.let ? coinList.filter(c => c.cat === currentCat) : coinList.filter(c => c.cat === currentCat);
+                    let filtered = currentCat === 'all' ? coinList : coinList.filter(c => c.cat === currentCat);
                     renderCoins(filtered);
                 }
             }
