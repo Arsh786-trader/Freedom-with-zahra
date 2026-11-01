@@ -16,7 +16,6 @@
         .top-right-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         .time-display { color: #38bdf8; font-weight: bold; font-size: 11px; }
         .lang-btn { background: #ffb703; color: #000; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 10px; }
-        .lang-btn:hover { background: #f77f00; color: #fff; }
 
         /* Navigation Filters Bar */
         .nav-bar { display: flex; gap: 6px; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 6px; align-items: center; overflow-x: auto; }
@@ -34,7 +33,7 @@
         .search-input { width: 100%; max-width: 400px; padding: 6px 10px; background-color: #111827; border: 1px solid #1f2937; border-radius: 6px; color: #fff; font-size: 11px; outline: none; }
         .search-input:focus { border-color: #38bdf8; }
 
-        /* Workspace Layout - STRICT FLEX CONTAINER TO KEEP SIDEBAR FIXED ON RIGHT */
+        /* Workspace Layout */
         .workspace { display: flex; flex-direction: row; gap: 8px; align-items: flex-start; width: 100%; }
         .main-content { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
@@ -49,7 +48,7 @@
         .coin-desc { font-size: 9px; color: #94a3b8; margin-top: 3px; }
         .coin-action { font-size: 9px; color: #38bdf8; margin-top: 4px; font-weight: bold; }
 
-        /* Right Sidebar Styling - FORCED FIXED WIDTH ON RIGHT */
+        /* Right Sidebar Styling */
         .sidebar { width: 230px; min-width: 230px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         .sidebar-section h4 { font-size: 10px; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1f2937; padding-bottom: 2px; margin-bottom: 5px; }
         
@@ -85,6 +84,7 @@
     <!-- Navigation Filters Bar -->
     <nav class="nav-bar">
         <button class="nav-item active" onclick="filterCategory('allMexc', event)" id="nav-all">🌐 All Mexc</button>
+        <button class="nav-item" onclick="filterCategory('dashboard', event)" id="nav-dash">📊 Dashboard</button>
         <button class="nav-item" onclick="filterCategory('hidden-bullish', event)" id="nav-hb">Hidden Bullish (25-40 RSI)</button>
         <button class="nav-item" onclick="filterCategory('v1-method', event)" id="nav-v1">V1 Scalping (55-56 RSI)</button>
         <button class="nav-item" onclick="filterCategory('rsi-55-60', event)" id="nav-rsi">RSI 55-60 Range</button>
@@ -96,15 +96,15 @@
     <!-- Market Sentiment Banner -->
     <div class="market-banner">
         <div class="brand-card-top" id="banner-title">Freedom With Zara Dynamic Rotating Scanner</div>
-        <div style="font-size: 10px; color: #94a3b8;" id="timerText">Next rotation in: 10s</div>
+        <div style="font-size: 10px; color: #94a3b8;" id="timerText">Status: Live Search Active</div>
         <div class="market-sentiment">
-            <span>➡️ NEUTRAL</span>
+            <span>➡️ UNRESTRICTED</span>
         </div>
     </div>
 
     <!-- Search Bar -->
     <div class="search-container">
-        <input type="text" id="coinSearch" class="search-input" placeholder="Search any MEXC coin (e.g., BTC, PEPE)..." onkeyup="filterBySearch()">
+        <input type="text" id="coinSearch" class="search-input" placeholder="Type ANY MEXC coin (e.g., BTC, PEPE, NEWCOIN)..." onkeyup="filterBySearch()">
     </div>
 
     <!-- Main Workspace Layout -->
@@ -113,17 +113,17 @@
         <!-- Left Content Area (Zones) -->
         <div class="main-content">
             <div class="zone-box">
-                <div class="zone-title" id="zone1Title">⚡ Rotating Signal Zone <span style="font-weight: normal; color: #64748b;" id="count1">(0 coins)</span></div>
+                <div class="zone-title" id="zone1Title">⚡ Search / Live Result Zone <span style="font-weight: normal; color: #64748b;" id="count1">(0 coins)</span></div>
                 <div class="coin-grid" id="grid1"></div>
             </div>
 
             <div class="zone-box">
-                <div class="zone-title" id="zone2Title">🔥 Secondary Signal Zone <span style="font-weight: normal; color: #64748b;" id="count2">(0 coins)</span></div>
+                <div class="zone-title" id="zone2Title">🔥 Market Feed / Trending <span style="font-weight: normal; color: #64748b;" id="count2">(0 coins)</span></div>
                 <div class="coin-grid" id="grid2"></div>
             </div>
         </div>
 
-        <!-- Right Sidebar Panel - Restored & Locked -->
+        <!-- Right Sidebar Panel -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h4>🔥 Top Movers</h4>
@@ -171,25 +171,11 @@
             if(currentLang === 'ur') {
                 document.getElementById('brand-text').innerText = 'فریडम ود زارا';
                 document.getElementById('lang-toggle-btn').innerText = 'English';
-                document.getElementById('nav-all').innerText = '🌐 سب MEXC';
-                document.getElementById('nav-hb').innerText = 'ہڈن بلش (25-40 RSI)';
-                document.getElementById('nav-v1').innerText = 'V1 اسکالپنگ (55-56 RSI)';
-                document.getElementById('nav-rsi').innerText = 'RSI 55-60 رینج';
-                document.getElementById('nav-ema').innerText = 'EMA کرॉसओवर';
-                document.getElementById('nav-ob').innerText = '1H آرڈر بلاک';
-                document.getElementById('nav-sniper').innerText = '⚡ الفا اسنائپر';
-                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں (جیسے: BTC, PEPE)...';
+                document.getElementById('coinSearch').placeholder = 'کوਈ بھی MEXC کوائن لکھیں (جیسے: BTC, PEPE, ya naya coin)...';
             } else {
                 document.getElementById('brand-text').innerText = 'Freedom With Zara';
                 document.getElementById('lang-toggle-btn').innerText = 'اردو (Urdu)';
-                document.getElementById('nav-all').innerText = '🌐 All Mexc';
-                document.getElementById('nav-hb').innerText = 'Hidden Bullish (25-40 RSI)';
-                document.getElementById('nav-v1').innerText = 'V1 Scalping (55-56 RSI)';
-                document.getElementById('nav-rsi').innerText = 'RSI 55-60 Range';
-                document.getElementById('nav-ema').innerText = 'EMA Crossover';
-                document.getElementById('nav-ob').innerText = '1H Order Block';
-                document.getElementById('nav-sniper').innerText = '⚡ Alpha Sniper';
-                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin (e.g., BTC, PEPE)...';
+                document.getElementById('coinSearch').placeholder = 'Type ANY MEXC coin (e.g., BTC, PEPE, NEWCOIN)...';
             }
         }
 
@@ -202,17 +188,7 @@
         setInterval(updatePakistanTime, 1000);
         updatePakistanTime();
 
-        const masterPool = [
-            "BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "KASUSDT", "ADAUSDT", "DOTUSDT", "LINKUSDT", "FETUSDT", "ARBUSDT", 
-            "RENDERUSDT", "SUIUSDT", "JASMYUSDT", "DOGEUSDT", "AVAXUSDT", "NEARUSDT", "MATICUSDT", "OPUSDT", "ATOMUSDT", "UNIUSDT",
-            "APTUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT", "SHIBUSDT", "FLOKIUSDT", "BONKUSDT", "WIFUSDT", "ICPUSDT", 
-            "GRTUSDT", "RUNEUSDT", "STXUSDT", "IMXUSDT", "SFPUSDT", "BOMEUSDT", "SLERFUSDT", "POPCATUSDT", "MEWUSDT", "NOTUSDT",
-            "ZETAUSDT", "PIXELUSDT", "PORTALUSDT", "AXLUSDT", "MANTAUSDT", "CHIPUSDT", "BEAMXUSDT", "BANKUSDT", "PARTIUSDT", "KATUSDT"
-        ];
-
-        const sniperCoins = ["SOLUSDT", "RENDERUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT", "FETUSDT", "NEARUSDT", "SUIUSDT", "DOGEUSDT"];
-
-        let currentCategory = 'allMexc';
+        const defaultCoins = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "PEPEUSDT", "DOGEUSDT", "AVAXUSDT", "NEARUSDT", "SUIUSDT", "SHIBUSDT"];
 
         function renderGrid(containerId, countId, coinArray, categoryName) {
             const container = document.getElementById(containerId);
@@ -235,63 +211,70 @@
             countEl.innerText = `(${coinArray.length} coins)`;
         }
 
+        // Fetch live ticker symbols directly from MEXC Public API so ANY coin works instantly!
+        async function fetchAllMexcCoins() {
+            try {
+                let response = await fetch('https://api.mexc.com/api/v3/ticker/price');
+                let data = await response.json();
+                if(Array.isArray(data)) {
+                    return data.map(item => item.symbol).filter(sym => sym.endsWith('USDT'));
+                }
+            } catch (e) {
+                console.log("API fallback used");
+            }
+            return defaultCoins;
+        }
+
+        let allMexcSymbols = [...defaultCoins];
+
+        async function initMasterList() {
+            let liveList = await fetchAllMexcCoins();
+            if(liveList && liveList.length > 0) {
+                allMexcSymbols = liveList;
+            }
+            loadDefaultView();
+        }
+
+        function loadDefaultView() {
+            renderGrid('grid1', 'count1', allMexcSymbols.slice(0, 15), 'Live MEXC Feed');
+            renderGrid('grid2', 'count2', allMexcSymbols.slice(15, 30), 'Trending Pool');
+        }
+
         function filterCategory(category, event) {
-            currentCategory = category;
             let buttons = document.querySelectorAll('.nav-item');
             buttons.forEach(btn => btn.classList.remove('active'));
             if(event) event.target.classList.add('active');
             
             document.getElementById('coinSearch').value = '';
-            loadDataForCategory(category);
-        }
-
-        function loadDataForCategory(cat) {
-            let shuffled = [...masterPool].sort(() => 0.5 - Math.random());
-            
-            if(cat === 'allMexc') {
-                document.getElementById('zone1Title').innerHTML = `⚡ All Mexc Master Pool <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
-                document.getElementById('zone2Title').innerHTML = `🔥 Rotation Highlights <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
-                renderGrid('grid1', 'count1', masterPool, 'Master Pool');
-                renderGrid('grid2', 'count2', shuffled.slice(0, 15), 'Rotating Live');
-            } else if(cat === 'alpha-sniper') {
-                document.getElementById('zone1Title').innerHTML = `🎯 Alpha Sniper Zone <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
-                document.getElementById('zone2Title').innerHTML = `⚡ Sniper Targets <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
-                renderGrid('grid1', 'count1', sniperCoins, 'Alpha Sniper');
-                renderGrid('grid2', 'count2', sniperCoins.slice(0, 5), 'Sniper Focus');
+            if(category === 'alpha-sniper') {
+                renderGrid('grid1', 'count1', ["SOLUSDT", "RENDERUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT"], 'Alpha Sniper');
+                renderGrid('grid2', 'count2', ["FETUSDT", "NEARUSDT", "SUIUSDT", "DOGEUSDT"], 'Sniper Focus');
             } else {
-                document.getElementById('zone1Title').innerHTML = `📊 Signal Zone (${cat.toUpperCase()}) <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
-                document.getElementById('zone2Title').innerHTML = `🔄 Rotating Pool <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
-                renderGrid('grid1', 'count1', shuffled.slice(0, 12), cat);
-                renderGrid('grid2', 'count2', shuffled.slice(12, 24), cat);
+                loadDefaultView();
             }
         }
 
+        // Dynamic Instant Search for ANY MEXC Coin
         function filterBySearch() {
             let query = document.getElementById('coinSearch').value.toUpperCase().trim();
             if(query !== "") {
-                let searchMatch = [query.includes("USDT") ? query : query + "USDT"];
-                renderGrid('grid1', 'count1', searchMatch, 'Manual Search');
-                renderGrid('grid2', 'count2', [], 'Search Results');
+                let formattedQuery = query.includes("USDT") ? query : query + "USDT";
+                
+                // Search across all live MEXC symbols or create a custom direct card if it's a brand new coin name
+                let matches = allMexcSymbols.filter(sym => sym.includes(formattedQuery.replace('USDT','')));
+                if(matches.length === 0) {
+                    matches = [formattedQuery]; // Allows any arbitrary new coin typed by user to instantly display!
+                }
+
+                renderGrid('grid1', 'count1', matches.slice(0, 15), 'Instant Search Result');
+                renderGrid('grid2', 'count2', [], 'Filtered View');
             } else {
-                loadDataForCategory(currentCategory);
+                loadDefaultView();
             }
         }
 
-        // Initial Load
-        loadDataForCategory('allMexc');
-
-        // Automatic 10s rotation timer
-        let timeLeft = 10;
-        setInterval(() => {
-            timeLeft--;
-            if(timeLeft < 0) {
-                timeLeft = 10;
-                if(!document.getElementById('coinSearch').value) {
-                    loadDataForCategory(currentCategory);
-                }
-            }
-            document.getElementById('timerText').innerText = `Next rotation in: ${timeLeft}s`;
-        }, 1000);
+        // Initial load from live MEXC API
+        initMasterList();
     </script>
 </body>
 </html>
