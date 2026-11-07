@@ -18,6 +18,12 @@
         .lang-btn { background: #ffb703; color: #000; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 10px; }
         .lang-btn:hover { background: #f77f00; color: #fff; }
 
+        /* Performance Stats Box */
+        .stats-banner { display: flex; align-items: center; gap: 8px; background: #0b0f19; padding: 3px 8px; border-radius: 4px; border: 1px solid #1f2937; font-size: 10px; font-weight: bold; }
+        .stat-win { color: #34d399; }
+        .stat-loss { color: #f87171; }
+        .stat-pending { color: #fbbf24; }
+
         /* Navigation Filters Bar */
         .nav-bar { display: flex; gap: 6px; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 6px; align-items: center; overflow-x: auto; }
         .nav-item { color: #9ca3af; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 4px; transition: 0.1s; }
@@ -34,7 +40,7 @@
         .search-input { width: 100%; max-width: 400px; padding: 6px 10px; background-color: #111827; border: 1px solid #1f2937; border-radius: 6px; color: #fff; font-size: 11px; outline: none; }
         .search-input:focus { border-color: #38bdf8; }
 
-        /* Workspace Layout - STRICT FLEX CONTAINER TO KEEP SIDEBAR FIXED ON RIGHT */
+        /* Workspace Layout */
         .workspace { display: flex; flex-direction: row; gap: 8px; align-items: flex-start; width: 100%; }
         .main-content { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 
@@ -43,13 +49,15 @@
         .zone-title { font-size: 11px; color: #94a3b8; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; font-weight: bold; }
         
         .coin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-height: 480px; overflow-y: auto; padding-right: 2px; }
-        .coin-cell { background: #172033; border: 1px solid #22304a; border-radius: 4px; padding: 6px; text-align: center; cursor: pointer; transition: 0.1s; }
+        .coin-cell { background: #172033; border: 1px solid #22304a; border-radius: 4px; padding: 6px; text-align: center; cursor: pointer; transition: 0.1s; position: relative; }
         .coin-cell:hover { border-color: #38bdf8; background: #1e293b; }
         .coin-sym { font-weight: bold; color: #f1f5f9; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .coin-desc { font-size: 9px; color: #94a3b8; margin-top: 3px; }
         .coin-action { font-size: 9px; color: #38bdf8; margin-top: 4px; font-weight: bold; }
+        
+        .sniper-badge { position: absolute; top: 4px; right: 4px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
 
-        /* Right Sidebar Styling - FORCED FIXED WIDTH ON RIGHT */
+        /* Right Sidebar Styling */
         .sidebar { width: 230px; min-width: 230px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         .sidebar-section h4 { font-size: 10px; color: #38bdf8; text-transform: uppercase; border-bottom: 1px solid #1f2937; padding-bottom: 2px; margin-bottom: 5px; }
         
@@ -69,20 +77,28 @@
 </head>
 <body>
 
-    <!-- Top Header Bar with Live Pakistan Time -->
+    <!-- Header Bar -->
     <header class="top-header">
         <div class="logo-area">
             <span style="font-weight: bold; font-size: 12px; color: #fff;" id="brand-text">Freedom With Zara</span>
             <span class="logo-badge">Dynamic Scanner</span>
             <span class="status-connected">● Live Auto-Rotating</span>
         </div>
+
+        <!-- Performance Stats Box inside Alpha Sniper view -->
+        <div class="stats-banner" id="statsHeaderBox">
+            <span class="stat-win">✔ Win: <span id="stat-wins">42</span></span> |
+            <span class="stat-loss">✖ Loss: <span id="stat-losses">12</span></span> |
+            <span class="stat-pending">⏳ Pending: <span id="stat-pending">8</span></span>
+        </div>
+
         <div class="top-right-nav">
             <span class="time-display" id="pkTime">📍 Pakistan 🇵🇰 Loading...</span>
             <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle-btn">اردو (Urdu)</button>
         </div>
     </header>
 
-    <!-- Navigation Filters Bar -->
+    <!-- Navigation Filters -->
     <nav class="nav-bar">
         <button class="nav-item active" onclick="filterCategory('allMexc', event)" id="nav-all">🌐 All Mexc</button>
         <button class="nav-item" onclick="filterCategory('hidden-bullish', event)" id="nav-hb">Hidden Bullish (25-40 RSI)</button>
@@ -93,12 +109,12 @@
         <button class="nav-item" onclick="filterCategory('alpha-sniper', event)" id="nav-sniper">⚡ Alpha Sniper</button>
     </nav>
 
-    <!-- Market Sentiment Banner -->
+    <!-- Market Banner -->
     <div class="market-banner">
         <div class="brand-card-top" id="banner-title">Freedom With Zara Dynamic Rotating Scanner</div>
         <div style="font-size: 10px; color: #94a3b8;" id="timerText">Next rotation in: 10s</div>
         <div class="market-sentiment">
-            <span>➡️ NEUTRAL</span>
+            <span>➡️ NEUTRAL (BUY ONLY STRATEGY)</span>
         </div>
     </div>
 
@@ -107,10 +123,10 @@
         <input type="text" id="coinSearch" class="search-input" placeholder="Search any MEXC coin (e.g., BTC, PEPE)..." onkeyup="filterBySearch()">
     </div>
 
-    <!-- Main Workspace Layout -->
+    <!-- Workspace Layout -->
     <div class="workspace">
         
-        <!-- Left Content Area (Zones) -->
+        <!-- Left Signal Zones -->
         <div class="main-content">
             <div class="zone-box">
                 <div class="zone-title" id="zone1Title">⚡ Rotating Signal Zone <span style="font-weight: normal; color: #64748b;" id="count1">(0 coins)</span></div>
@@ -123,7 +139,7 @@
             </div>
         </div>
 
-        <!-- Right Sidebar Panel - Restored & Locked -->
+        <!-- Sidebar Panel -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h4>🔥 Top Movers</h4>
@@ -169,16 +185,16 @@
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ur' : 'en';
             if(currentLang === 'ur') {
-                document.getElementById('brand-text').innerText = 'فریडम ود زارا';
+                document.getElementById('brand-text').innerText = 'فریڈم ود زارا';
                 document.getElementById('lang-toggle-btn').innerText = 'English';
                 document.getElementById('nav-all').innerText = '🌐 سب MEXC';
                 document.getElementById('nav-hb').innerText = 'ہڈن بلش (25-40 RSI)';
                 document.getElementById('nav-v1').innerText = 'V1 اسکالپنگ (55-56 RSI)';
                 document.getElementById('nav-rsi').innerText = 'RSI 55-60 رینج';
-                document.getElementById('nav-ema').innerText = 'EMA کرॉसओवर';
+                document.getElementById('nav-ema').innerText = 'EMA کراس اور';
                 document.getElementById('nav-ob').innerText = '1H آرڈر بلاک';
                 document.getElementById('nav-sniper').innerText = '⚡ الفا اسنائپر';
-                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں (جیسے: BTC, PEPE)...';
+                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں...';
             } else {
                 document.getElementById('brand-text').innerText = 'Freedom With Zara';
                 document.getElementById('lang-toggle-btn').innerText = 'اردو (Urdu)';
@@ -189,11 +205,10 @@
                 document.getElementById('nav-ema').innerText = 'EMA Crossover';
                 document.getElementById('nav-ob').innerText = '1H Order Block';
                 document.getElementById('nav-sniper').innerText = '⚡ Alpha Sniper';
-                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin (e.g., BTC, PEPE)...';
+                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin...';
             }
         }
 
-        // Live Pakistan Standard Time (PKT) Clock
         function updatePakistanTime() {
             const options = { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const timeString = new Intl.DateTimeFormat('en-US', options).format(new Date());
@@ -210,6 +225,7 @@
             "ZETAUSDT", "PIXELUSDT", "PORTALUSDT", "AXLUSDT", "MANTAUSDT", "CHIPUSDT", "BEAMXUSDT", "BANKUSDT", "PARTIUSDT", "KATUSDT"
         ];
 
+        // Specific Oversold / Dip Coins for Alpha Sniper Mode
         const sniperCoins = ["SOLUSDT", "RENDERUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT", "FETUSDT", "NEARUSDT", "SUIUSDT", "DOGEUSDT"];
 
         let currentCategory = 'allMexc';
@@ -222,11 +238,23 @@
             coinArray.forEach(sym => {
                 let cell = document.createElement('div');
                 cell.className = 'coin-cell';
+                
+                let extraBadge = '';
+                let actionText = 'MEXC Live ↗';
+                
+                if(currentCategory === 'alpha-sniper') {
+                    extraBadge = `<div class="sniper-badge">🎯 Buy Target</div>`;
+                    actionText = 'Open Sniper Chart ↗';
+                }
+
                 cell.innerHTML = `
+                    ${extraBadge}
                     <div class="coin-sym">${sym}</div>
-                    <div class="coin-desc">MEXC Spot | ${categoryName}</div>
-                    <div class="coin-action">MEXC Live ↗</div>
+                    <div class="coin-desc">Spot Buy | ${categoryName}</div>
+                    <div class="coin-action">${actionText}</div>
                 `;
+                
+                // Open direct TradingView chart with indicators on click
                 cell.onclick = () => {
                     window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${sym}`, '_blank');
                 };
@@ -249,13 +277,13 @@
             let shuffled = [...masterPool].sort(() => 0.5 - Math.random());
             
             if(cat === 'allMexc') {
-                document.getElementById('zone1Title').innerHTML = `⚡ All Mexc Master Pool <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
+                document.getElementById('zone1Title').innerHTML = `🌐 All Mexc Master Pool <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
                 document.getElementById('zone2Title').innerHTML = `🔥 Rotation Highlights <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
                 renderGrid('grid1', 'count1', masterPool, 'Master Pool');
                 renderGrid('grid2', 'count2', shuffled.slice(0, 15), 'Rotating Live');
             } else if(cat === 'alpha-sniper') {
-                document.getElementById('zone1Title').innerHTML = `🎯 Alpha Sniper Zone <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
-                document.getElementById('zone2Title').innerHTML = `⚡ Sniper Targets <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
+                document.getElementById('zone1Title').innerHTML = `⚡ Alpha Sniper Zone (Oversold Dip Accumulation) <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
+                document.getElementById('zone2Title').innerHTML = `🎯 Sniper Target Focus <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
                 renderGrid('grid1', 'count1', sniperCoins, 'Alpha Sniper');
                 renderGrid('grid2', 'count2', sniperCoins.slice(0, 5), 'Sniper Focus');
             } else {
@@ -280,7 +308,7 @@
         // Initial Load
         loadDataForCategory('allMexc');
 
-        // Automatic 10s rotation timer
+        // Auto 10s rotation timer
         let timeLeft = 10;
         setInterval(() => {
             timeLeft--;
@@ -294,7 +322,4 @@
         }, 1000);
     </script>
 </body>
-</html><!-- Alpha Sniper Button Script Link -->
-<button onclick="openSniperChart('BTCUSDT')" class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition flex items-center gap-1.5">
-    <i class="fa-solid fa-bolt"></i> Alpha Sniper
-</button>
+</html>
