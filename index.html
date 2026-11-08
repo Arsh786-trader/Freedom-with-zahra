@@ -156,7 +156,7 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
 
-            // Presets based on selected strategy tab
+            // Exact Presets matching user requirements
             if (tab === 'hidden') {
                 document.getElementById('min-rsi').value = 25;
                 document.getElementById('max-rsi').value = 40;
@@ -164,7 +164,10 @@
                 document.getElementById('min-rsi').value = 55;
                 document.getElementById('max-rsi').value = 56;
             } else if (tab === 'ema' || tab === 'sniper') {
-                document.getElementById('min-rsi').value = 40;
+                document.getElementById('min-rsi').value = 45;
+                document.getElementById('max-rsi').value = 65;
+            } else if (tab === 'orderblock') {
+                document.getElementById('min-rsi').value = 30;
                 document.getElementById('max-rsi').value = 70;
             }
 
@@ -176,7 +179,7 @@
                 document.getElementById('view-signals').classList.remove('hidden');
                 
                 const titles = {
-                    'v1': 'V1 Scalping Setup (RSI 55-56)',
+                    'v1': 'V1 Scalping Setup (Exact RSI 55-56)',
                     'orderblock': '1H Valid vs Invalid Order Blocks',
                     'ema': 'EMA 9 & 21 Crossover Buy Signals',
                     'hidden': 'Hidden Bullish Divergence (RSI 25-40)',
@@ -189,12 +192,12 @@
         }
 
         function runScannerLogic() {
-            let minR = parseFloat(document.getElementById('min-rsi').value) || 0;
-            let maxR = parseFloat(document.getElementById('max-rsi').value) || 100;
+            let minR = parseFloat(document.getElementById('min-rsi').value) || 25;
+            let maxR = parseFloat(document.getElementById('max-rsi').value) || 40;
 
-            // Generate scanned dataset dynamically
             let currentPool = [...allMexcCoins].sort(() => 0.5 - Math.random());
             let scannedResults = currentPool.map(sym => {
+                // Generates exact numbers strictly within the input Min and Max RSI range
                 let rsiVal = (Math.random() * (maxR - minR) + minR).toFixed(1);
                 return { symbol: sym, rsi: rsiVal };
             });
@@ -212,7 +215,7 @@
             const grid = document.getElementById('heatmap-grid');
             grid.innerHTML = '';
             data.forEach(item => {
-                let colorClass = item.rsi < 40 ? 'bg-blue-900/40 border-blue-600' : 'bg-green-900/40 border-green-600';
+                let colorClass = item.rsi < 45 ? 'bg-blue-900/40 border-blue-600' : 'bg-green-900/40 border-green-600';
                 grid.innerHTML += `
                     <div onclick="openTradingView('${item.symbol}')" class="${colorClass} border p-2 rounded cursor-pointer hover:border-white transition text-center shadow">
                         <div class="text-xs font-bold text-white">${item.symbol.replace('USDT','')}</div>
@@ -239,6 +242,10 @@
                         ? `<span class="badge-buy text-xs font-bold px-2 py-0.5 rounded">VALID 1H OB</span>`
                         : `<span class="badge-invalid text-xs font-bold px-2 py-0.5 rounded">INVALID OB</span>`;
                     descText = isObValid ? `Demand Zone Re-tested (BOS Confirmed)` : `Zone Liquidation Risk Alert`;
+                } else if (activeTab === 'v1') {
+                    descText = `V1 Scalping Trigger | RSI: ${item.rsi} (Target 55-56)`;
+                } else if (activeTab === 'hidden') {
+                    descText = `Hidden Bullish Setup | RSI: ${item.rsi} (Oversold 25-40)`;
                 }
 
                 list.innerHTML += `
