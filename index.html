@@ -44,7 +44,7 @@
     <!-- Main Content Grid -->
     <main class="flex-1 p-4 overflow-y-auto space-y-4">
 
-        <!-- Scanner Control Toolbar (Start / Stop / Reset & Inputs) -->
+        <!-- Scanner Control Toolbar -->
         <div class="glass-panel p-3 rounded-lg flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex items-center space-x-2">
                 <button onclick="startScanner()" class="bg-green-600 hover:bg-green-500 text-white font-bold px-3 py-1.5 rounded transition">▶ Start</button>
@@ -64,12 +64,10 @@
                 <h2 class="text-lg font-bold text-white">MEXC Spot RSI Heatmap Grid</h2>
                 <span class="text-xs text-gray-400">Exclusive MEXC Pairs Only</span>
             </div>
-            <div id="heatmap-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
-                <!-- Populated via JavaScript -->
-            </div>
+            <div id="heatmap-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2"></div>
         </section>
 
-        <!-- EMA / ALPHA SNIPER STRATEGY VIEW WITH STATS OVERLAY -->
+        <!-- EMA / ALPHA SNIPER VIEW WITH STATS OVERLAY -->
         <section id="view-ema" class="hidden space-y-4">
             <div class="flex justify-between items-center">
                 <div>
@@ -115,7 +113,7 @@
             <div id="ob-signals-list" class="space-y-2"></div>
         </section>
 
-        <!-- OTHER VIEWS (V1, Hidden Bullish, Sniper) -->
+        <!-- OTHER VIEWS -->
         <section id="view-generic" class="hidden space-y-4">
             <h2 id="generic-title" class="text-lg font-bold text-white">Filter Results</h2>
             <div id="generic-signals-list" class="space-y-2"></div>
@@ -124,11 +122,9 @@
     </main>
 
     <script>
-        // Strictly MEXC Spot Coins Pool
         const mexcCoins = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'YVEUSDT', 'HUMAUSDT', 'DUSKUSDT', 'PLUMEUSDT', 'TRXUSDT', 'DODOUSDT', 'SUIUSDT', 'XRPUSDT', 'ADAUSDT'];
         let isRunning = true;
 
-        // Auto Refresh Timer (10 Seconds)
         let countdown = 10;
         setInterval(() => {
             if (!isRunning) return;
@@ -193,7 +189,7 @@
                 const bg = rsi > 50 ? 'bg-green-900/40 border-green-600' : 'bg-blue-900/40 border-blue-600';
                 
                 grid.innerHTML += `
-                    <div onclick="openChart('${symbol}')" class="${bg} border p-2 rounded cursor-pointer hover:border-white transition text-center shadow">
+                    <div onclick="openTradingViewDirect('${symbol}')" class="${bg} border p-2 rounded cursor-pointer hover:border-white transition text-center shadow">
                         <div class="text-xs font-bold text-white">${symbol.replace('USDT', '')}</div>
                         <div class="text-[10px] text-gray-300">RSI: ${rsi}</div>
                     </div>
@@ -207,13 +203,13 @@
             list.innerHTML = '';
             mexcCoins.slice(0, 6).forEach(symbol => {
                 list.innerHTML += `
-                    <div onclick="openChart('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
+                    <div onclick="openTradingViewDirect('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
                         <div class="flex items-center space-x-3">
                             <span class="badge-buy text-xs font-bold px-2 py-0.5 rounded">BUY SIGNAL</span>
                             <span class="font-bold text-white text-sm">${symbol} (MEXC Spot)</span>
                             <span class="text-xs text-gray-400">EMA 9 crossed EMA 21 (1H Timeframe)</span>
                         </div>
-                        <span class="text-xs text-green-400 font-mono">100% Win Confirmed</span>
+                        <span class="text-xs text-green-400 font-mono">100% Win Confirmed ↗</span>
                     </div>
                 `;
             });
@@ -226,7 +222,7 @@
             mexcCoins.slice(0, 5).forEach((symbol, idx) => {
                 const isValid = idx % 2 === 0;
                 list.innerHTML += `
-                    <div onclick="openChart('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
+                    <div onclick="openTradingViewDirect('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
                         <div class="flex items-center space-x-3">
                             <span class="${isValid ? 'badge-buy' : 'badge-invalid'} text-xs font-bold px-2 py-0.5 rounded">
                                 ${isValid ? 'VALID 1H OB' : 'INVALID OB'}
@@ -234,7 +230,7 @@
                             <span class="font-bold text-white text-sm">${symbol}</span>
                             <span class="text-xs text-gray-400">${isValid ? 'Demand Zone Re-tested (Spot Long)' : 'Zone Liquidation Risk'}</span>
                         </div>
-                        <span class="text-xs font-mono text-gray-300">1H Spot</span>
+                        <span class="text-xs font-mono text-gray-300">1H Spot ↗</span>
                     </div>
                 `;
             });
@@ -246,11 +242,11 @@
             list.innerHTML = '';
             mexcCoins.slice(0, 5).forEach(symbol => {
                 list.innerHTML += `
-                    <div onclick="openChart('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
+                    <div onclick="openTradingViewDirect('${symbol}')" class="glass-panel p-3 rounded flex justify-between items-center cursor-pointer hover:bg-slate-800/80 transition">
                         <div class="flex items-center space-x-3">
                             <span class="badge-buy text-xs font-bold px-2 py-0.5 rounded">BUY SETUP</span>
                             <span class="font-bold text-white text-sm">${symbol} (MEXC Spot)</span>
-                            <span class="text-xs text-gray-450">${tab.toUpperCase()} criteria matched on 1H</span>
+                            <span class="text-xs text-gray-400">${tab.toUpperCase()} criteria matched on 1H</span>
                         </div>
                         <span class="text-xs text-blue-400 font-mono">View Chart ↗</span>
                     </div>
@@ -258,9 +254,10 @@
             });
         }
 
-        // Direct open TradingView chart in new tab
-        function openChart(symbol) {
-            window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${symbol}&interval=60`, '_blank');
+        // STRICT DIRECT LAUNCH TO TRADINGVIEW (NEW TAB)
+        function openTradingViewDirect(symbol) {
+            const url = `https://www.tradingview.com/chart/?symbol=MEXC:${symbol}&interval=60`;
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         // Initial Load
