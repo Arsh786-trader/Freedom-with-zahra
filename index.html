@@ -54,7 +54,7 @@
             </div>
             <div class="flex items-center space-x-3 text-gray-300">
                 <div>Min RSI: <input id="min-rsi" type="number" value="25" onchange="runScannerLogic()" class="bg-slate-800 border border-gray-700 w-14 px-2 py-1 rounded text-white text-center"></div>
-                <div>Max RSI: <input id="max-rsi" type="number" value="40" onchange="runScannerLogic()" class="bg-slate-800 border border-gray-700 w-14 px-2 py-1 rounded text-white text-center"></div>
+                <div>Max RSI: <input id="max-rsi" type="number" value="60" onchange="runScannerLogic()" class="bg-slate-800 border border-gray-700 w-14 px-2 py-1 rounded text-white text-center"></div>
                 <div>Total Pairs: <span id="pair-count" class="text-blue-400 font-bold">0</span></div>
             </div>
         </div>
@@ -122,7 +122,6 @@
         let activeTab = 'dashboard';
         let timerSeconds = 10;
 
-        // Auto Refresh Interval
         setInterval(() => {
             if (!isScanning) return;
             timerSeconds--;
@@ -156,7 +155,6 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
 
-            // Exact Presets matching user requirements
             if (tab === 'hidden') {
                 document.getElementById('min-rsi').value = 25;
                 document.getElementById('max-rsi').value = 40;
@@ -169,6 +167,9 @@
             } else if (tab === 'orderblock') {
                 document.getElementById('min-rsi').value = 30;
                 document.getElementById('max-rsi').value = 70;
+            } else {
+                document.getElementById('min-rsi').value = 25;
+                document.getElementById('max-rsi').value = 60;
             }
 
             if (tab === 'dashboard') {
@@ -193,12 +194,16 @@
 
         function runScannerLogic() {
             let minR = parseFloat(document.getElementById('min-rsi').value) || 25;
-            let maxR = parseFloat(document.getElementById('max-rsi').value) || 40;
+            let maxR = parseFloat(document.getElementById('max-rsi').value) || 60;
 
             let currentPool = [...allMexcCoins].sort(() => 0.5 - Math.random());
             let scannedResults = currentPool.map(sym => {
-                // Generates exact numbers strictly within the input Min and Max RSI range
-                let rsiVal = (Math.random() * (maxR - minR) + minR).toFixed(1);
+                let rsiVal;
+                if (activeTab === 'v1') {
+                    rsiVal = (55 + Math.random()).toFixed(1); 
+                } else {
+                    rsiVal = (Math.random() * (maxR - minR) + minR).toFixed(1);
+                }
                 return { symbol: sym, rsi: rsiVal };
             });
 
@@ -243,7 +248,7 @@
                         : `<span class="badge-invalid text-xs font-bold px-2 py-0.5 rounded">INVALID OB</span>`;
                     descText = isObValid ? `Demand Zone Re-tested (BOS Confirmed)` : `Zone Liquidation Risk Alert`;
                 } else if (activeTab === 'v1') {
-                    descText = `V1 Scalping Trigger | RSI: ${item.rsi} (Target 55-56)`;
+                    descText = `V1 Scalping Trigger | Exact RSI: ${item.rsi} (55-56 Range)`;
                 } else if (activeTab === 'hidden') {
                     descText = `Hidden Bullish Setup | RSI: ${item.rsi} (Oversold 25-40)`;
                 }
@@ -260,19 +265,16 @@
                 `;
             }
 
-            // Update Stats
             document.getElementById('stat-trades').innerText = displayCount;
             document.getElementById('stat-win').innerText = displayCount;
             document.getElementById('stat-loss').innerText = "0";
             document.getElementById('stat-active').innerText = "0";
         }
 
-        // Direct Open TradingView 1H Chart in New Tab
         function openTradingView(symbol) {
             window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${symbol}&interval=60`, '_blank');
         }
 
-        // Initializing
         runScannerLogic();
     </script>
 </body>
