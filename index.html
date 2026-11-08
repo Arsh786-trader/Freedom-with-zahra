@@ -18,12 +18,6 @@
         .lang-btn { background: #ffb703; color: #000; padding: 3px 8px; border-radius: 4px; font-weight: bold; border: none; cursor: pointer; font-size: 10px; }
         .lang-btn:hover { background: #f77f00; color: #fff; }
 
-        /* Performance Stats Box */
-        .stats-banner { display: flex; align-items: center; gap: 8px; background: #0b0f19; padding: 3px 8px; border-radius: 4px; border: 1px solid #1f2937; font-size: 10px; font-weight: bold; }
-        .stat-win { color: #34d399; }
-        .stat-loss { color: #f87171; }
-        .stat-pending { color: #fbbf24; }
-
         /* Navigation Filters Bar */
         .nav-bar { display: flex; gap: 6px; background: #111827; padding: 6px 12px; border-radius: 6px; border: 1px solid #1f2937; margin-bottom: 6px; align-items: center; overflow-x: auto; }
         .nav-item { color: #9ca3af; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 11px; white-space: nowrap; display: flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 4px; transition: 0.1s; }
@@ -53,9 +47,8 @@
         .coin-cell:hover { border-color: #38bdf8; background: #1e293b; }
         .coin-sym { font-weight: bold; color: #f1f5f9; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .coin-desc { font-size: 9px; color: #94a3b8; margin-top: 3px; }
+        .buy-tag { display: inline-block; background: #10b981; color: #070b19; font-weight: bold; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-top: 4px; }
         .coin-action { font-size: 9px; color: #38bdf8; margin-top: 4px; font-weight: bold; }
-        
-        .sniper-badge { position: absolute; top: 4px; right: 4px; background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: bold; }
 
         /* Right Sidebar Styling */
         .sidebar { width: 230px; min-width: 230px; background: #111827; border: 1px solid #1f2937; border-radius: 6px; padding: 6px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
@@ -77,44 +70,34 @@
 </head>
 <body>
 
-    <!-- Header Bar -->
+    <!-- Top Header Bar -->
     <header class="top-header">
         <div class="logo-area">
             <span style="font-weight: bold; font-size: 12px; color: #fff;" id="brand-text">Freedom With Zara</span>
             <span class="logo-badge">Dynamic Scanner</span>
             <span class="status-connected">● Live Auto-Rotating</span>
         </div>
-
-        <!-- Performance Stats Box inside Alpha Sniper view -->
-        <div class="stats-banner" id="statsHeaderBox">
-            <span class="stat-win">✔ Win: <span id="stat-wins">42</span></span> |
-            <span class="stat-loss">✖ Loss: <span id="stat-losses">12</span></span> |
-            <span class="stat-pending">⏳ Pending: <span id="stat-pending">8</span></span>
-        </div>
-
         <div class="top-right-nav">
             <span class="time-display" id="pkTime">📍 Pakistan 🇵🇰 Loading...</span>
             <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle-btn">اردو (Urdu)</button>
         </div>
     </header>
 
-    <!-- Navigation Filters -->
+    <!-- Navigation Filters Bar -->
     <nav class="nav-bar">
         <button class="nav-item active" onclick="filterCategory('allMexc', event)" id="nav-all">🌐 All Mexc</button>
         <button class="nav-item" onclick="filterCategory('hidden-bullish', event)" id="nav-hb">Hidden Bullish (25-40 RSI)</button>
-        <button class="nav-item" onclick="filterCategory('v1-method', event)" id="nav-v1">V1 Scalping (55-56 RSI)</button>
-        <button class="nav-item" onclick="filterCategory('rsi-55-60', event)" id="nav-rsi">RSI 55-60 Range</button>
+        <button class="nav-item" onclick="filterCategory('alpha-sniper', event)" id="nav-sniper">⚡ Alpha Sniper (1H)</button>
         <button class="nav-item" onclick="filterCategory('ema', event)" id="nav-ema">EMA Crossover</button>
         <button class="nav-item" onclick="filterCategory('ob', event)" id="nav-ob">1H Order Block</button>
-        <button class="nav-item" onclick="filterCategory('alpha-sniper', event)" id="nav-sniper">⚡ Alpha Sniper</button>
     </nav>
 
-    <!-- Market Banner -->
+    <!-- Market Sentiment Banner -->
     <div class="market-banner">
         <div class="brand-card-top" id="banner-title">Freedom With Zara Dynamic Rotating Scanner</div>
         <div style="font-size: 10px; color: #94a3b8;" id="timerText">Next rotation in: 10s</div>
         <div class="market-sentiment">
-            <span>➡️ NEUTRAL (BUY ONLY STRATEGY)</span>
+            <span>➡️ NEUTRAL</span>
         </div>
     </div>
 
@@ -123,10 +106,10 @@
         <input type="text" id="coinSearch" class="search-input" placeholder="Search any MEXC coin (e.g., BTC, PEPE)..." onkeyup="filterBySearch()">
     </div>
 
-    <!-- Workspace Layout -->
+    <!-- Main Workspace Layout -->
     <div class="workspace">
         
-        <!-- Left Signal Zones -->
+        <!-- Left Content Area (Zones) -->
         <div class="main-content">
             <div class="zone-box">
                 <div class="zone-title" id="zone1Title">⚡ Rotating Signal Zone <span style="font-weight: normal; color: #64748b;" id="count1">(0 coins)</span></div>
@@ -139,7 +122,7 @@
             </div>
         </div>
 
-        <!-- Sidebar Panel -->
+        <!-- Right Sidebar Panel -->
         <aside class="sidebar">
             <div class="sidebar-section">
                 <h4>🔥 Top Movers</h4>
@@ -152,18 +135,17 @@
 
             <div class="sidebar-section">
                 <h4>⚡ Active Scanners</h4>
-                <div class="scanner-toggle-row"><span>V1 Scalping</span><input type="checkbox" checked></div>
+                <div class="scanner-toggle-row"><span>Alpha Sniper (1H)</span><input type="checkbox" checked></div>
                 <div class="scanner-toggle-row"><span>Order Block</span><input type="checkbox" checked></div>
                 <div class="scanner-toggle-row"><span>EMA Crossover</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>Hidden Bullish</span><input type="checkbox" checked></div>
-                <div class="scanner-toggle-row"><span>Alpha Sniper</span><input type="checkbox" checked></div>
+                <div class="scanner-toggle-row"><span>Hidden Bullish (RSI 25-40)</span><input type="checkbox" checked></div>
             </div>
 
             <div class="sidebar-section chart-setting-box">
                 <h4>📊 Chart Settings</h4>
                 <div style="font-size: 9px; color: #94a3b8; margin-bottom: 3px;">TradingView Timeframe</div>
                 <select>
-                    <option>1H</option>
+                    <option selected>1H</option>
                     <option>15M</option>
                     <option>4H</option>
                     <option>1D</option>
@@ -189,26 +171,23 @@
                 document.getElementById('lang-toggle-btn').innerText = 'English';
                 document.getElementById('nav-all').innerText = '🌐 سب MEXC';
                 document.getElementById('nav-hb').innerText = 'ہڈن بلش (25-40 RSI)';
-                document.getElementById('nav-v1').innerText = 'V1 اسکالپنگ (55-56 RSI)';
-                document.getElementById('nav-rsi').innerText = 'RSI 55-60 رینج';
-                document.getElementById('nav-ema').innerText = 'EMA کراس اور';
+                document.getElementById('nav-sniper').innerText = '⚡ الفا اسنائپر (1H)';
+                document.getElementById('nav-ema').innerText = 'EMA کراس اوور';
                 document.getElementById('nav-ob').innerText = '1H آرڈر بلاک';
-                document.getElementById('nav-sniper').innerText = '⚡ الفا اسنائپر';
-                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں...';
+                document.getElementById('coinSearch').placeholder = 'کوئی بھی MEXC کوائن سرچ کریں (جیسے: BTC, PEPE)...';
             } else {
                 document.getElementById('brand-text').innerText = 'Freedom With Zara';
                 document.getElementById('lang-toggle-btn').innerText = 'اردو (Urdu)';
                 document.getElementById('nav-all').innerText = '🌐 All Mexc';
                 document.getElementById('nav-hb').innerText = 'Hidden Bullish (25-40 RSI)';
-                document.getElementById('nav-v1').innerText = 'V1 Scalping (55-56 RSI)';
-                document.getElementById('nav-rsi').innerText = 'RSI 55-60 Range';
+                document.getElementById('nav-sniper').innerText = '⚡ Alpha Sniper (1H)';
                 document.getElementById('nav-ema').innerText = 'EMA Crossover';
                 document.getElementById('nav-ob').innerText = '1H Order Block';
-                document.getElementById('nav-sniper').innerText = '⚡ Alpha Sniper';
-                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin...';
+                document.getElementById('coinSearch').placeholder = 'Search any MEXC coin (e.g., BTC, PEPE)...';
             }
         }
 
+        // Live Pakistan Standard Time (PKT) Clock
         function updatePakistanTime() {
             const options = { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
             const timeString = new Intl.DateTimeFormat('en-US', options).format(new Date());
@@ -225,7 +204,6 @@
             "ZETAUSDT", "PIXELUSDT", "PORTALUSDT", "AXLUSDT", "MANTAUSDT", "CHIPUSDT", "BEAMXUSDT", "BANKUSDT", "PARTIUSDT", "KATUSDT"
         ];
 
-        // Specific Oversold / Dip Coins for Alpha Sniper Mode
         const sniperCoins = ["SOLUSDT", "RENDERUSDT", "INJUSDT", "TIAUSDT", "SEIUSDT", "PEPEUSDT", "FETUSDT", "NEARUSDT", "SUIUSDT", "DOGEUSDT"];
 
         let currentCategory = 'allMexc';
@@ -238,25 +216,14 @@
             coinArray.forEach(sym => {
                 let cell = document.createElement('div');
                 cell.className = 'coin-cell';
-                
-                let extraBadge = '';
-                let actionText = 'MEXC Live ↗';
-                
-                if(currentCategory === 'alpha-sniper') {
-                    extraBadge = `<div class="sniper-badge">🎯 Buy Target</div>`;
-                    actionText = 'Open Sniper Chart ↗';
-                }
-
                 cell.innerHTML = `
-                    ${extraBadge}
                     <div class="coin-sym">${sym}</div>
-                    <div class="coin-desc">Spot Buy | ${categoryName}</div>
-                    <div class="coin-action">${actionText}</div>
+                    <div class="coin-desc">MEXC Spot | 1H Chart</div>
+                    <div><span class="buy-tag">▲ BUY SIGNAL</span></div>
+                    <div class="coin-action">TradingView ↗</div>
                 `;
-                
-                // Open direct TradingView chart with indicators on click
                 cell.onclick = () => {
-                    window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${sym}`, '_blank');
+                    window.open(`https://www.tradingview.com/chart/?symbol=MEXC:${sym}&interval=60`, '_blank');
                 };
                 container.appendChild(cell);
             });
@@ -277,13 +244,13 @@
             let shuffled = [...masterPool].sort(() => 0.5 - Math.random());
             
             if(cat === 'allMexc') {
-                document.getElementById('zone1Title').innerHTML = `🌐 All Mexc Master Pool <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
+                document.getElementById('zone1Title').innerHTML = `⚡ All Mexc Master Pool <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
                 document.getElementById('zone2Title').innerHTML = `🔥 Rotation Highlights <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
                 renderGrid('grid1', 'count1', masterPool, 'Master Pool');
                 renderGrid('grid2', 'count2', shuffled.slice(0, 15), 'Rotating Live');
-            } else if(cat === 'alpha-sniper') {
-                document.getElementById('zone1Title').innerHTML = `⚡ Alpha Sniper Zone (Oversold Dip Accumulation) <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
-                document.getElementById('zone2Title').innerHTML = `🎯 Sniper Target Focus <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
+            } else if(cat === 'alpha-sniper' || cat === 'hidden-bullish') {
+                document.getElementById('zone1Title').innerHTML = `🎯 Alpha Sniper / Dip Zone (RSI 25-40) <span style="font-weight: normal; color: #64748b;" id="count1"></span>`;
+                document.getElementById('zone2Title').innerHTML = `⚡ 1H Pullback Targets <span style="font-weight: normal; color: #64748b;" id="count2"></span>`;
                 renderGrid('grid1', 'count1', sniperCoins, 'Alpha Sniper');
                 renderGrid('grid2', 'count2', sniperCoins.slice(0, 5), 'Sniper Focus');
             } else {
@@ -308,7 +275,7 @@
         // Initial Load
         loadDataForCategory('allMexc');
 
-        // Auto 10s rotation timer
+        // Automatic 10s rotation timer
         let timeLeft = 10;
         setInterval(() => {
             timeLeft--;
